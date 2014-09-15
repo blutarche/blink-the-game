@@ -1,8 +1,11 @@
+import net.java.games.input.Mouse;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 
@@ -12,7 +15,6 @@ public class BlinkTheGame extends BasicGame {
 	public static final int GAME_HEIGHT = 700;
 	
 	private Ninja ninja;
-	private Cursor cursor;
 	
 	private int mouseX, mouseY;
 	
@@ -37,7 +39,7 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		ninja.render();
-		cursor.render();
+		//cursor.render();
 	}
 
 	@Override
@@ -45,13 +47,13 @@ public class BlinkTheGame extends BasicGame {
 	    Color background = new Color(0, 0, 0);
 	    container.getGraphics().setBackground(background);        
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
-		cursor = new Cursor(GAME_WIDTH/2,GAME_HEIGHT/2);
+		Image cursorImage = new Image("res/cursor-2.png"); 
+		container.setMouseCursor(cursorImage, 25, 25);
 	}
 
 	@Override
 	public void update(GameContainer container, int val) throws SlickException {
 		ninja.update(container);
-		cursor.update(container,mouseX,mouseY);
 	}
 	
 	@Override
