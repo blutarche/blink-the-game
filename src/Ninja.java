@@ -7,13 +7,14 @@ import org.newdawn.slick.SlickException;
 
 
 public class Ninja {
+	
 	private Image image;
 	
 	public static float x;
 	public static float y;
 	public static float v;
-	private static final int CHR_WIDTH 	= 60;
-	private static final int CHR_HEIGHT = 60;
+	private static final int CHR_WIDTH 	= 40;
+	private static final int CHR_HEIGHT = 40;
 	
 	  private boolean left;	private boolean right;
 	  private boolean up;	private boolean down;

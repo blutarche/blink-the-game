@@ -8,18 +8,21 @@ import org.newdawn.slick.SlickException;
 
 public class BlinkTheGame extends BasicGame {
 
-	public static final int GAME_WIDTH 	= 1366;
-	public static final int GAME_HEIGHT = 768;
+	public static final int GAME_WIDTH 	= 1000;
+	public static final int GAME_HEIGHT = 700;
 	
 	private Ninja ninja;
+	private Cursor cursor;
+	
+	private int mouseX, mouseY;
 	
 	public static void main (String [] args) {
 	    try {
 		      BlinkTheGame game = new BlinkTheGame("Blink!");
 		      AppGameContainer appgc = new AppGameContainer(game);
-		      appgc.setDisplayMode(GAME_WIDTH, GAME_HEIGHT, true);
-		      appgc.setMinimumLogicUpdateInterval(10);
-		      appgc.setMaximumLogicUpdateInterval(10);
+		      appgc.setDisplayMode(GAME_WIDTH, GAME_HEIGHT, false);
+		      appgc.setMinimumLogicUpdateInterval(5);
+		      appgc.setMaximumLogicUpdateInterval(5);
 		      appgc.start();
 		    } catch (SlickException e) {
 		      e.printStackTrace();
@@ -33,24 +36,28 @@ public class BlinkTheGame extends BasicGame {
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
-		// TODO Auto-generated method stub
 		ninja.render();
-		
+		cursor.render();
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		// TODO Auto-generated method stub
-	    Color background = new Color(41, 51, 61);
+	    Color background = new Color(0, 0, 0);
 	    container.getGraphics().setBackground(background);        
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
-		
+		cursor = new Cursor(GAME_WIDTH/2,GAME_HEIGHT/2);
 	}
 
 	@Override
 	public void update(GameContainer container, int val) throws SlickException {
-		// TODO Auto-generated method stub
 		ninja.update(container);
+		cursor.update(container,mouseX,mouseY);
+	}
+	
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		this.mouseX = newx;
+		this.mouseY = newy;
 	}
 
 }
