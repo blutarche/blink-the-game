@@ -13,8 +13,8 @@ public class Ninja {
 	public static float x;
 	public static float y;
 	public static float v;
-	private static final int CHR_WIDTH 	= 40;
-	private static final int CHR_HEIGHT = 40;
+	private static final int CHR_WIDTH 	= 30;
+	private static final int CHR_HEIGHT = 30;
 	
 	private boolean left;	private boolean right;
 	private boolean up;		private boolean down;
@@ -22,7 +22,7 @@ public class Ninja {
 	public Ninja(float x, float y) throws SlickException {
 	    this.x = x;
 	    this.y = y;
-	    this.v = 4;
+	    this.v = 3;
 	    image = new Image("res/ninja-dot.png");
 	}
 

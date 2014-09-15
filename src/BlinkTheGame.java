@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 
 public class BlinkTheGame extends BasicGame {
 
-	public static final int GAME_WIDTH 	= 1000;
+	public static final int GAME_WIDTH 	= 1200;
 	public static final int GAME_HEIGHT = 700;
 	
 	private Ninja ninja;
