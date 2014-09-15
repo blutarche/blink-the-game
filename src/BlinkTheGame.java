@@ -16,7 +16,7 @@ public class BlinkTheGame extends BasicGame {
 	
 	private Ninja ninja;
 	
-	private int mouseX, mouseY;
+	public static int mouseX, mouseY;
 	
 	public static void main (String [] args) {
 	    try {

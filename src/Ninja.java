@@ -22,7 +22,7 @@ public class Ninja {
 	public Ninja(float x, float y) throws SlickException {
 	    this.x = x;
 	    this.y = y;
-	    this.v = 3;
+	    this.v = 4;
 	    image = new Image("res/ninja-dot.png");
 		image.setCenterOfRotation(CHR_WIDTH/2, CHR_HEIGHT/2);
 	  }
@@ -33,7 +33,12 @@ public class Ninja {
 	  }
 
 		private void adjustHeadDirection () {
-			
+			int mouseX = BlinkTheGame.mouseX;
+			int mouseY = BlinkTheGame.mouseY;
+			float xDistance = mouseX - x;
+			float yDistance = mouseY - y;
+			double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+			image.setRotation((float)angleToTurn);
 		}
 	  public void update(GameContainer container) {
 	    Input input = container.getInput();
