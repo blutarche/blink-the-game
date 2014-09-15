@@ -16,7 +16,7 @@ public class Cursor {
 	public Cursor(float x, float y) throws SlickException {
 	    this.x = x;
 	    this.y = y;
-	    image = new Image("res/cursor.png");
+	    image = new Image("res/cursor-1.png");
 		image.setCenterOfRotation(CHR_WIDTH/2, CHR_HEIGHT/2);
 	  }
 	
