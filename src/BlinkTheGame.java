@@ -51,7 +51,7 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void update(GameContainer container, int val) throws SlickException {
 		// TODO Auto-generated method stub
-		
+		ninja.update(container);
 	}
 
 }
