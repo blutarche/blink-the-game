@@ -34,7 +34,6 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
-		
 		ninja.render();
 		
 	}

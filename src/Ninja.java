@@ -11,6 +11,7 @@ public class Ninja {
 	
 	public static float x;
 	public static float y;
+	public static float v;
 	private static final int CHR_WIDTH 	= 60;
 	private static final int CHR_HEIGHT = 60;
 	
@@ -20,7 +21,9 @@ public class Ninja {
 	public Ninja(float x, float y) throws SlickException {
 	    this.x = x;
 	    this.y = y;
+	    this.v = 3;
 	    image = new Image("res/ninja-dot.png");
+		image.setCenterOfRotation(CHR_WIDTH/2, CHR_HEIGHT/2);
 	  }
 
 	  public void render() {
@@ -29,19 +32,6 @@ public class Ninja {
 	  }
 
 		private void adjustHeadDirection () {
-			if (left) {
-				if (up) image.setRotation(315);
-				else if (down) image.setRotation(225);
-				else image.setRotation(270);
-			}
-			else if (right) {
-				if (up) image.setRotation(45);
-				else if (down) image.setRotation(135);
-				else image.setRotation(90);
-			}
-			else if (up) image.setRotation(0);
-			else if (down) image.setRotation(180);
-			
 			
 		}
 	  public void update(GameContainer container) {
@@ -59,32 +49,34 @@ public class Ninja {
 	    if (input.isKeyDown(Input.KEY_S)) {
 	        down = true;      
 	    }
+	    changePosition();
+	    adjustPosition();
 	  }
 		private void changePosition () {
 			if (left) {
 				if (up) {
-					x-=1;
-					y-=1;
+					x-=v;
+					y-=v;
 				}
 				else if (down) {
-					x-=1;
-					y+=1;
+					x-=v;
+					y+=v;
 				}
-				else x-=Math.sqrt(2);
+				else x-=v*Math.sqrt(2);
 			}
 			else if (right) {
 				if (up) {
-					x+=1;
-					y-=1;
+					x+=v;
+					y-=v;
 				}
 				else if (down) {
-					x+=1;
-					y+=1;
+					x+=v;
+					y+=v;
 				}
-				else x+=Math.sqrt(2);
+				else x+=v*Math.sqrt(2);
 			}
-			else if (up) y-=Math.sqrt(2);
-			else if (down) y+=Math.sqrt(2);
+			else if (up) y-=v*Math.sqrt(2);
+			else if (down) y+=v*Math.sqrt(2);
 		}
 		private void adjustPosition () {
 			int limitX = BlinkTheGame.GAME_WIDTH - CHR_WIDTH;
