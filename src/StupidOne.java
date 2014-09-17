@@ -7,9 +7,9 @@ public class StupidOne extends Enemy {
 	private double turningDegree;
 	private double distanceGoing;
 
-	private static final double RUN_LIMIT = 51.0;
-	private static final double DEG_LIMIT = 60.0;
-	private static final double TURN_SPEED = 5.0;
+	private static final double RUN_LIMIT = 120.0;
+	private static final double DEG_LIMIT = 120.0;
+	private static final double TURN_SPEED = 3.0;
 	
 	private int movementMode; //0=start 1=running 2=turnstart 3=turning
 	
@@ -22,15 +22,14 @@ public class StupidOne extends Enemy {
 
 
 	public void update () {
-		if (distanceGoing == RUN_LIMIT) {
+		if (distanceGoing >= RUN_LIMIT) {
 			movementMode = 2;
+			distanceGoing = 0;
 		}
 		if (movementMode == 0) {
 			checkIfInsideScreen();
-			run();
 		}
 		else if (movementMode == 1) {
-			run();
 		}
 		else if (movementMode == 2) {
 			turnStart();
@@ -38,6 +37,7 @@ public class StupidOne extends Enemy {
 		else {
 			turning();
 		}
+		run();
 	}
 	
 	private void checkIfInsideScreen () {
@@ -73,7 +73,7 @@ public class StupidOne extends Enemy {
 		
 		double degreeChange = Math.random() * DEG_LIMIT * 2 - DEG_LIMIT;
 		int tempDegree = (int)degreeChange/(int)TURN_SPEED;
-//		System.out.println("tempDegree: "+tempDegree);
+		System.out.println("tempDegree:"+tempDegree);
 		this.desiredTurnDegree = tempDegree * TURN_SPEED;
 		this.turningDegree = 0.0;
 		movementMode = 3;
@@ -86,7 +86,7 @@ public class StupidOne extends Enemy {
 			distanceGoing = 0;
 			movementMode = 1;
 		}
-		if (desiredTurnDegree<0) {
+		else if (desiredTurnDegree<0) {
 			this.degree -= TURN_SPEED;
 			this.turningDegree -= TURN_SPEED;
 		}
