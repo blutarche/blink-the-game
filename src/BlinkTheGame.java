@@ -52,13 +52,12 @@ public class BlinkTheGame extends BasicGame {
 	    Color background = new Color(0, 0, 0);
 	    container.getGraphics().setBackground(background);        
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
-		Image cursorImage = new Image("res/cursor-2.png"); 
+		Image cursorImage = new Image("res/cursor-2.png");
 		container.setMouseCursor(cursorImage, 25, 25);
 		
 		for (int i=0;i<STUPID_COUNT;i++) {
 			double randomX = Math.random() * GAME_WIDTH  + 1;
-			double randomY = Math.random() * GAME_HEIGHT  + 1;
-			System.out.println("x:"+randomX+" y:"+randomY);
+			double randomY = Math.random() * GAME_HEIGHT + 1;
 			stupids[i] = new StupidOne((float)randomX, (float)randomY);
 		}
 		

@@ -10,9 +10,9 @@ public class Ninja {
 	
 	private Image image;
 	
-	public static float x;
-	public static float y;
-	public static float v;
+	public float x;
+	public float y;
+	public float v;
 	private static final int CHR_WIDTH 	= 30;
 	private static final int CHR_HEIGHT = 30;
 	
