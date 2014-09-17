@@ -16,7 +16,7 @@ public class BlinkTheGame extends BasicGame {
 
 	public static final int GAME_WIDTH 	= 1366;
 	public static final int GAME_HEIGHT = 768;
-	public static final int STUPID_COUNT = 50;
+	public static final int STUPID_COUNT = 10;
 	
 	private Ninja ninja;
 	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
@@ -57,18 +57,35 @@ public class BlinkTheGame extends BasicGame {
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
 		Image cursorImage = new Image("res/cursor-2.png");
 		container.setMouseCursor(cursorImage, 25, 25);
-		int stupidWidth = Enemy.CHR_WIDTH;
-		int stupidHeight = Enemy.CHR_HEIGHT;
 		for (int i=0;i<STUPID_COUNT;i++) {
-			Point randomPos = randomPosition(stupidWidth, stupidHeight);
+			double randomSide = Math.random()*4;
+			Point randomPos = randomPosition(randomSide);
 			stupids[i] = new StupidOne((float)randomPos.getX(), (float)randomPos.getY());
 		}
 		
 	}
 
-	public Point randomPosition (int widthLimit, int heightLimit) {
-		double randomX = Math.random() * (GAME_WIDTH-widthLimit)  + 1;
-		double randomY = Math.random() * (GAME_HEIGHT-heightLimit) + 1;
+	public Point randomPosition (double randomSide) {
+		int stupidWidth = Enemy.CHR_WIDTH;
+		int stupidHeight = Enemy.CHR_HEIGHT;
+		double randomX;
+		double randomY;
+		if (randomSide<1) { //Left
+			randomX = -stupidWidth;
+			randomY = Math.random() * (GAME_HEIGHT-stupidHeight);
+		}
+		else if (randomSide<2) { //Right
+			randomX = GAME_WIDTH;
+			randomY = Math.random() * (GAME_HEIGHT-stupidHeight);
+		}
+		else if (randomSide<3) { //Up
+			randomX = Math.random() * (GAME_WIDTH-stupidWidth);
+			randomY = -stupidHeight;
+		}
+		else { //Down
+			randomX = Math.random() * (GAME_WIDTH-stupidWidth);
+			randomY = GAME_HEIGHT;
+		}
 		Point position = new Point((float)randomX, (float)randomY);
 		return position;
 	}
