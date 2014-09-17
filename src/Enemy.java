@@ -24,6 +24,7 @@ public class Enemy {
 	}
 	
 	public void render() {
+	    image.setCenterOfRotation(CHR_WIDTH/2, CHR_HEIGHT/2);
 	    image.draw(x, y, CHR_WIDTH, CHR_HEIGHT);
 	    adjustHeadDirection();
 	}

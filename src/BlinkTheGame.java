@@ -13,7 +13,7 @@ public class BlinkTheGame extends BasicGame {
 
 	public static final int GAME_WIDTH 	= 1200;
 	public static final int GAME_HEIGHT = 700;
-	public static final int STUPID_COUNT = 5;
+	public static final int STUPID_COUNT = 8;
 	
 	private Ninja ninja;
 	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
