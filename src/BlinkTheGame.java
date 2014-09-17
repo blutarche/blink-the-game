@@ -13,8 +13,10 @@ public class BlinkTheGame extends BasicGame {
 
 	public static final int GAME_WIDTH 	= 1200;
 	public static final int GAME_HEIGHT = 700;
+	public static final int STUPID_COUNT = 5;
 	
 	private Ninja ninja;
+	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
 	
 	public static int mouseX, mouseY;
 	
@@ -39,6 +41,9 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		ninja.render();
+		for (int i=0;i<STUPID_COUNT;i++) {
+			stupids[i].render();
+		}
 		//cursor.render();
 	}
 
@@ -49,11 +54,22 @@ public class BlinkTheGame extends BasicGame {
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
 		Image cursorImage = new Image("res/cursor-2.png"); 
 		container.setMouseCursor(cursorImage, 25, 25);
+		
+		for (int i=0;i<STUPID_COUNT;i++) {
+			double randomX = Math.random() * GAME_WIDTH  + 1;
+			double randomY = Math.random() * GAME_HEIGHT  + 1;
+			System.out.println("x:"+randomX+" y:"+randomY);
+			stupids[i] = new StupidOne((float)randomX, (float)randomY);
+		}
+		
 	}
 
 	@Override
 	public void update(GameContainer container, int val) throws SlickException {
 		ninja.update(container);
+		for (int i=0;i<STUPID_COUNT;i++) {
+			stupids[i].update();
+		}
 	}
 	
 	@Override
