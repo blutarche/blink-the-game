@@ -50,14 +50,17 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 	    Color background = new Color(0, 0, 0);
-	    container.getGraphics().setBackground(background);        
+	    container.getGraphics().setBackground(background);
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
 		Image cursorImage = new Image("res/cursor-2.png");
 		container.setMouseCursor(cursorImage, 25, 25);
 		
+		int stupidWidth = Enemy.CHR_WIDTH;
+		int stupidHeight = Enemy.CHR_HEIGHT;
+		
 		for (int i=0;i<STUPID_COUNT;i++) {
-			double randomX = Math.random() * GAME_WIDTH  + 1;
-			double randomY = Math.random() * GAME_HEIGHT + 1;
+			double randomX = Math.random() * (GAME_WIDTH-stupidWidth)  + 1;
+			double randomY = Math.random() * (GAME_HEIGHT-stupidHeight) + 1;
 			stupids[i] = new StupidOne((float)randomX, (float)randomY);
 		}
 		

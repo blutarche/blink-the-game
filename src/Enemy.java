@@ -10,8 +10,8 @@ public class Enemy {
 	public float y;
 	public float v;
 	public float degree;
-	private static final int CHR_WIDTH  = 30;
-	private static final int CHR_HEIGHT = 30;
+	public static final int CHR_WIDTH  = 30;
+	public static final int CHR_HEIGHT = 30;
 	
 	public Enemy(float x, float y, float v, String imageLocation) throws SlickException {
 	    this.x = x;
@@ -29,6 +29,6 @@ public class Enemy {
 	}
 	
 	private void adjustHeadDirection () {
-		image.setRotation(degree);;
+		image.setRotation(degree);
 	}
 }
