@@ -1,3 +1,5 @@
+import java.awt.geom.Point2D;
+
 import net.java.games.input.Mouse;
 
 import org.newdawn.slick.AppGameContainer;
@@ -7,13 +9,14 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Point;
 
 
 public class BlinkTheGame extends BasicGame {
 
-	public static final int GAME_WIDTH 	= 1200;
-	public static final int GAME_HEIGHT = 700;
-	public static final int STUPID_COUNT = 8;
+	public static final int GAME_WIDTH 	= 1366;
+	public static final int GAME_HEIGHT = 768;
+	public static final int STUPID_COUNT = 50;
 	
 	private Ninja ninja;
 	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
@@ -40,10 +43,10 @@ public class BlinkTheGame extends BasicGame {
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
-		ninja.render();
 		for (int i=0;i<STUPID_COUNT;i++) {
 			stupids[i].render();
 		}
+		ninja.render();
 		//cursor.render();
 	}
 
@@ -54,18 +57,22 @@ public class BlinkTheGame extends BasicGame {
 	    ninja = new Ninja(GAME_WIDTH/2,GAME_HEIGHT/2);
 		Image cursorImage = new Image("res/cursor-2.png");
 		container.setMouseCursor(cursorImage, 25, 25);
-		
 		int stupidWidth = Enemy.CHR_WIDTH;
 		int stupidHeight = Enemy.CHR_HEIGHT;
-		
 		for (int i=0;i<STUPID_COUNT;i++) {
-			double randomX = Math.random() * (GAME_WIDTH-stupidWidth)  + 1;
-			double randomY = Math.random() * (GAME_HEIGHT-stupidHeight) + 1;
-			stupids[i] = new StupidOne((float)randomX, (float)randomY);
+			Point randomPos = randomPosition(stupidWidth, stupidHeight);
+			stupids[i] = new StupidOne((float)randomPos.getX(), (float)randomPos.getY());
 		}
 		
 	}
 
+	public Point randomPosition (int widthLimit, int heightLimit) {
+		double randomX = Math.random() * (GAME_WIDTH-widthLimit)  + 1;
+		double randomY = Math.random() * (GAME_HEIGHT-heightLimit) + 1;
+		Point position = new Point((float)randomX, (float)randomY);
+		return position;
+	}
+	
 	@Override
 	public void update(GameContainer container, int val) throws SlickException {
 		ninja.update(container);
