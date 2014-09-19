@@ -22,7 +22,7 @@ public class Ninja {
 	public Ninja(float x, float y) throws SlickException {
 	    this.x = x;
 	    this.y = y;
-	    this.v = 3;
+	    this.v = 2.0f;
 	    image = new Image("res/ninja-dot.png");
 	}
 
@@ -91,5 +91,13 @@ public class Ninja {
 		if (x>limitX) x=limitX;
 		if (y<0) y=0;
 		if (y>limitY) y=limitY;
+	}
+	
+	public void attack () {
+		
+	}
+	public void blink () {
+		this.x = BlinkTheGame.mouseX-(CHR_WIDTH/2);
+		this.y = BlinkTheGame.mouseY-(CHR_HEIGHT/2);
 	}
 }

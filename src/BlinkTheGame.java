@@ -14,9 +14,9 @@ import org.newdawn.slick.geom.Point;
 
 public class BlinkTheGame extends BasicGame {
 
-	public static final int GAME_WIDTH 	= 1366;
-	public static final int GAME_HEIGHT = 768;
-	public static final int STUPID_COUNT = 10;
+	public static final int GAME_WIDTH 	= 800;
+	public static final int GAME_HEIGHT = 600;
+	public static final int STUPID_COUNT = 1;
 	
 	private Ninja ninja;
 	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
@@ -102,6 +102,18 @@ public class BlinkTheGame extends BasicGame {
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		this.mouseX = newx;
 		this.mouseY = newy;
+	}
+	
+	@Override
+	public void mousePressed(int button, int x, int y)
+	{
+		System.out.println("MousePressed: "+button);
+	    if( button == 0 ) {
+	    	ninja.attack();
+	    }
+	    else {
+	    	ninja.blink();
+	    }
 	}
 
 }
