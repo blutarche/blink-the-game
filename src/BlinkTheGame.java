@@ -1,7 +1,3 @@
-import java.awt.geom.Point2D;
-
-import net.java.games.input.Mouse;
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -11,12 +7,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 
-
 public class BlinkTheGame extends BasicGame {
 
-	public static final int GAME_WIDTH 	= 800;
-	public static final int GAME_HEIGHT = 600;
-	public static final int STUPID_COUNT = 1;
+	public static final int GAME_WIDTH 	= 1366;
+	public static final int GAME_HEIGHT = 768;
+	public static final int STUPID_COUNT = 5;
 	
 	private Ninja ninja;
 	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
@@ -72,18 +67,18 @@ public class BlinkTheGame extends BasicGame {
 		double randomY;
 		if (randomSide<1) { //Left
 			randomX = -stupidWidth;
-			randomY = Math.random() * (GAME_HEIGHT-stupidHeight);
+			randomY = Math.random() * (GAME_HEIGHT-stupidHeight-Enemy.PADDING*2) + Enemy.PADDING;
 		}
 		else if (randomSide<2) { //Right
 			randomX = GAME_WIDTH;
-			randomY = Math.random() * (GAME_HEIGHT-stupidHeight);
+			randomY = Math.random() * (GAME_HEIGHT-stupidHeight-Enemy.PADDING*2) + Enemy.PADDING;
 		}
 		else if (randomSide<3) { //Up
-			randomX = Math.random() * (GAME_WIDTH-stupidWidth);
+			randomX = Math.random() * (GAME_WIDTH-stupidWidth-Enemy.PADDING*2) + Enemy.PADDING;
 			randomY = -stupidHeight;
 		}
 		else { //Down
-			randomX = Math.random() * (GAME_WIDTH-stupidWidth);
+			randomX = Math.random() * (GAME_WIDTH-stupidWidth-Enemy.PADDING*2) + Enemy.PADDING;
 			randomY = GAME_HEIGHT;
 		}
 		Point position = new Point((float)randomX, (float)randomY);
@@ -100,20 +95,18 @@ public class BlinkTheGame extends BasicGame {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		this.mouseX = newx;
-		this.mouseY = newy;
+		mouseX = newx;
+		mouseY = newy;
 	}
 	
 	@Override
-	public void mousePressed(int button, int x, int y)
-	{
-		System.out.println("MousePressed: "+button);
-	    if( button == 0 ) {
-	    	ninja.attack();
-	    }
-	    else {
-	    	ninja.blink();
-	    }
+	public void mousePressed(int button, int x, int y) {
+		if (button == 0) {
+			ninja.attack();
+		}
+		else if (button == 1) {
+			ninja.blink(x,y);	
+		}
 	}
 
 }

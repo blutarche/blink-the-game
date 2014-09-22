@@ -4,8 +4,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-
-
 public class Ninja {
 	
 	private Image image;
@@ -13,8 +11,8 @@ public class Ninja {
 	public float x;
 	public float y;
 	public float v;
-	private static final int CHR_WIDTH 	= 30;
-	private static final int CHR_HEIGHT = 30;
+	private static final int CHR_WIDTH 	= 20;
+	private static final int CHR_HEIGHT = 20;
 	
 	private boolean left;	private boolean right;
 	private boolean up;		private boolean down;
@@ -22,7 +20,7 @@ public class Ninja {
 	public Ninja(float x, float y) throws SlickException {
 	    this.x = x;
 	    this.y = y;
-	    this.v = 2.0f;
+	    this.v = 3;
 	    image = new Image("res/ninja-dot.png");
 	}
 
@@ -92,12 +90,11 @@ public class Ninja {
 		if (y<0) y=0;
 		if (y>limitY) y=limitY;
 	}
-	
 	public void attack () {
 		
 	}
-	public void blink () {
-		this.x = BlinkTheGame.mouseX-(CHR_WIDTH/2);
-		this.y = BlinkTheGame.mouseY-(CHR_HEIGHT/2);
+	public void blink (int mouseX, int mouseY) {
+		this.x = mouseX-CHR_WIDTH/2;
+		this.y = mouseY-CHR_HEIGHT/2;
 	}
 }

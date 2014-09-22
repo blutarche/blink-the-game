@@ -3,73 +3,68 @@ import org.newdawn.slick.SlickException;
 
 public class StupidOne extends Enemy {
 
-	private double desiredTurnDegree;
-	private double turningDegree;
+	private double targetDegree;
 	private double distanceGoing;
-	private boolean isAtBorder;
-
+	
 	private double RUN_LIMIT = 100.0;
 	private final double RUN_INTO_LIMIT = 150.0;
-	private final double RUN_RANDOM_RANGE = 75.0;
-	private static final double DEG_LIMIT = 40.0;
-	private static final double TURN_SPEED = 0.5;
-	private static final float RUN_SPEED = 0.5f;
+	private final double RUN_RANDOM_RANGE = 30.0;
+	private final double DEG_LIMIT = 50.0;
+	private final double TURN_SPEED = 0.5;
+	private static final float RUN_SPEED = 1f;
 	
-	private int movementMode; //0=start 1=runintoscreen 2=running 3=turnstart 4=turning
+	private final int MODE_OFFSCREEN = 0;
+	private final int MODE_RUNNING = 1;
+	private final int MODE_TURNSTART = 2;
+	private final int MODE_TURNING = 3; 
+	
+	private int movementMode;
 	
 	public StupidOne(float x, float y) throws SlickException {
 		super(x, y, RUN_SPEED, "res/stupid-dot.png");
-		movementMode = 0;
+		movementMode = MODE_OFFSCREEN;
 		distanceGoing = 0;
-		// TODO Auto-generated constructor stub
+		degree = 0;
 	}
-
 
 	public void update () {
 		if (distanceGoing >= RUN_LIMIT) {
-			movementMode = 3;
+			movementMode = MODE_TURNSTART;
 			distanceGoing = 0;
-			RUN_LIMIT = randomRunDistance();
+			RUN_LIMIT = RUN_INTO_LIMIT;
 		}
-		if (movementMode == 0) {
-			checkIfInsideScreen();
-			run();
-		}
-		else if (movementMode == 1) {
-			RUN_LIMIT=240;
-			movementMode = 2;
-		}
-		else if (movementMode == 3) {
-			turnStart();
-		}
-		else if (movementMode == 4) {
-			turning();
-		}
-		else if (movementMode == 5) {
-			run();
-		}
-		else if (movementMode == 2) {
-			if (isOffScreen()){
-				turnAround();
+		if (movementMode == MODE_OFFSCREEN) {
+			checkStartingPosition();
+			if (!checkTurnEnd()) {
+				turning();
+			}
+			else if (!isOffScreen()){
+				run();
 			}
 			else {
-				run();
-			} 
+				movementMode = MODE_RUNNING;
+			}
 		}
-		//run();
-	}
-	
-	private void turnAround () {
-		desiredTurnDegree = 175;
-		turningDegree = 0;
-		distanceGoing = 0;
-		movementMode = 4;
-		isAtBorder = true;
-		RUN_LIMIT = randomRunDistance();
+		else if (movementMode == MODE_RUNNING) {
+			run();
+			if (isOffScreen()) {
+				movementMode = MODE_OFFSCREEN;
+			}
+		}
+		else if (movementMode == MODE_TURNSTART) {
+			turnStart();
+		}
+		else if (movementMode == MODE_TURNING){
+			turning();
+			if (checkTurnEnd()) {
+				movementMode = MODE_RUNNING;
+			}
+		}
 	}
 	
 	private boolean isOffScreen () {
-		if (0<=x&&x<=BlinkTheGame.GAME_WIDTH-CHR_WIDTH && 0<=y&&y<=BlinkTheGame.GAME_HEIGHT-CHR_HEIGHT) {
+		if (Enemy.PADDING<=x&&x<=BlinkTheGame.GAME_WIDTH-CHR_WIDTH-PADDING &&
+			Enemy.PADDING<=y&&y<=BlinkTheGame.GAME_HEIGHT-CHR_HEIGHT-PADDING) {
 			return false;
 		}
 		else {
@@ -77,41 +72,52 @@ public class StupidOne extends Enemy {
 		}
 	}
 	
-	private void checkIfInsideScreen () {
-		if (this.x<0) { //Start at Left side
-			degree = 0;
+	private void checkStartingPosition () {
+		if (this.x<Enemy.PADDING) { //Start at Left side
+			targetDegree = 0;
 		}
-		else if (this.x>BlinkTheGame.GAME_WIDTH-CHR_WIDTH) { // Start at Right side
-			degree = 180;
+		else if (this.x>BlinkTheGame.GAME_WIDTH-CHR_WIDTH-PADDING) { // Start at Right side
+			targetDegree = 180;
 		}
-		else if (this.y<0) { //Start at Up side
-			degree = 90;
+		else if (this.y<PADDING) { //Start at Up side
+			targetDegree = 90;
 		}
-		else if (this.y>BlinkTheGame.GAME_HEIGHT-CHR_HEIGHT) { // Start at Down side
-			degree = 270;
+		else if (this.y>BlinkTheGame.GAME_HEIGHT-CHR_HEIGHT-PADDING) { // Start at Down side
+			targetDegree = -90;
 		}
 		else {
-			movementMode = 2;
+			
 		}
 	}
-	
-	private void run () {	
-//		double degreeChange = Math.random() * DEG_LIMIT * 2 - DEG_LIMIT;
-//		this.degree += degreeChange;
+	private void run () {
 		double radians = Math.toRadians(this.degree);
 		double cos = Math.cos(radians);
 		double sin = Math.sin(radians);
 		this.x += this.v*cos;
 		this.y += this.v*sin;	
 		distanceGoing+=this.v;
+		checkRunEnd();
+	}
+	
+	private boolean checkRunEnd () {
+		if (distanceGoing >= RUN_LIMIT) {
+			movementMode = MODE_TURNSTART;
+			distanceGoing = 0;
+			RUN_LIMIT = randomRunDistance();
+			return true;
+		}
+		return false;
 	}
 	
 	private void turnStart () {
 		double degreeChange = randomTurnDegree();
 		int tempDegree = (int)(degreeChange/TURN_SPEED);
-		this.desiredTurnDegree = tempDegree * TURN_SPEED;
-		this.turningDegree = 0.0;
-		movementMode = 4;
+		double desiredTurnDegree = tempDegree * TURN_SPEED;
+		this.targetDegree = this.degree + desiredTurnDegree;
+		System.out.println("targetDegree: "+targetDegree);
+		if (this.targetDegree<-180) this.targetDegree += 360.0;
+		else if (this.targetDegree>180) this.targetDegree -= 360.0;
+		movementMode = MODE_TURNING;
 	}
 	
 	private double randomTurnDegree () {
@@ -126,24 +132,28 @@ public class StupidOne extends Enemy {
 		return temp;
 	}
 	
-	private void turning () {
-		System.out.println("t:"+turningDegree+" d:"+desiredTurnDegree);
-		if (turningDegree==desiredTurnDegree) {
-			this.turningDegree = 0.0;
-			distanceGoing = 0;
-			if (!isAtBorder) movementMode = 2;
-			else {
-				isAtBorder = false;
-				movementMode = 5;
-			}
+	private boolean checkTurnEnd () {
+		if (degree==targetDegree) {
+			return true;
 		}
-		else if (desiredTurnDegree<0) {
+		else {
+			return false;
+		}
+	}
+	private void turning () {
+		System.out.println("target:"+targetDegree+" current:"+degree);
+		if (degree>targetDegree) {
 			this.degree -= TURN_SPEED;
-			this.turningDegree -= TURN_SPEED;
 		}
 		else {
 			this.degree += TURN_SPEED;
-			this.turningDegree += TURN_SPEED;
+		}
+		if (degree<-180) {
+			degree += 360;
+		}
+		else if (degree>180) {
+			degree -= 360;
 		}
 	}
+	
 }

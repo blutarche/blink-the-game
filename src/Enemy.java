@@ -6,14 +6,12 @@ public class Enemy {
 
 	private Image image;
 	
-	public float x;
-	public float y;
-	public float v;
-	public float degree;
+	public float x; public float y;
+	public float v; public float degree;
 	
-	private static final int TURN_INTERVAL = 50;
-	public static final int CHR_WIDTH  = 30;
-	public static final int CHR_HEIGHT = 30;
+	public static final int CHR_WIDTH  = 20;
+	public static final int CHR_HEIGHT = 20;
+	public static final double PADDING = 60;
 	
 	public Enemy(float x, float y, float v, String imageLocation) throws SlickException {
 	    this.x = x;
