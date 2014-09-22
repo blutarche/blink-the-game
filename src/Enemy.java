@@ -12,9 +12,9 @@ public class Enemy {
 	public double rangeOfSight;
 	public double degreeOfSight;
 	
-	public static final int CHR_WIDTH  = 20;
-	public static final int CHR_HEIGHT = 20;
-	public static final double PADDING = 60;
+	public static final int CHR_WIDTH  = 30;
+	public static final int CHR_HEIGHT = 30;
+	public static final double PADDING = 70;
 	
 	private double targetDegree;
 	private double distanceGoing;
@@ -37,6 +37,7 @@ public class Enemy {
 	    this.x = x;
 	    this.y = y;
 	    this.v = v;
+	    
 	    image = new Image("res/"+enemyType+".png");
 		movementMode = MODE_OFFSCREEN;
 		distanceGoing = 0;
@@ -44,10 +45,12 @@ public class Enemy {
 		
 		rangeOfSight = sightRange;
 		degreeOfSight = sightDegree;
-		sight = new EnemySight(this, enemyType);
+		sight = new EnemySight(this, enemyType, sightRange, sightDegree);
 	}
 	
 	public void render() {
+	    sight.render();
+	    
 	    image.setCenterOfRotation(CHR_WIDTH/2, CHR_HEIGHT/2);
 	    image.draw(x, y, CHR_WIDTH, CHR_HEIGHT);
 	    adjustHeadDirection();
@@ -55,6 +58,7 @@ public class Enemy {
 	
 	public void update () {
 		this.move();
+		sight.update();
 	}
 	
 	private void move () {
