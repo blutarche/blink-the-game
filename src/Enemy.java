@@ -37,11 +37,11 @@ public class Enemy {
 	    this.x = x;
 	    this.y = y;
 	    this.v = v;
-		System.out.println("x:"+x+" y:"+y);
 	    image = new Image("res/"+enemyType+".png");
 		movementMode = MODE_OFFSCREEN;
 		distanceGoing = 0;
 		degree = 0;
+		
 		rangeOfSight = sightRange;
 		degreeOfSight = sightDegree;
 		sight = new EnemySight(this, enemyType);
@@ -60,40 +60,42 @@ public class Enemy {
 	private void move () {
 		checkRunEnd();
 		if (movementMode == MODE_OFFSCREEN) {
-			checkStartingPosition();
-			if (!checkTurnEnd()) {
-				turning();
-			}
-			else if (!isOffScreen()){
-				run();
-			}
-			else {
-				movementMode = MODE_RUNNING;
-			}
+			offscreenMovement();
 		}
 		else if (movementMode == MODE_RUNNING) {
-			run();
-			if (isOffScreen()) {
-				movementMode = MODE_OFFSCREEN;
-			}
+			runNormal();
 		}
 		else if (movementMode == MODE_TURNSTART) {
 			turnStart();
 		}
 		else if (movementMode == MODE_TURNING){
 			turning();
-			if (checkTurnEnd()) {
-				movementMode = MODE_RUNNING;
-			}
 		}
 	}
 	
+	private void runNormal () {
+		run();
+		if (isOffScreen()) {
+			movementMode = MODE_OFFSCREEN;
+		}
+	}
 	
+	private void offscreenMovement () {
+		checkStartingPosition();
+		if (!checkTurnEnd()) {
+			turning();
+		}
+		else if (!isOffScreen()){
+			run();
+		}
+		else {
+			movementMode = MODE_RUNNING;
+		}
+	}
 	
 	private void adjustHeadDirection () {
 		image.setRotation(degree);
 	}
-	
 
 	private boolean isOffScreen () {
 		if (Enemy.PADDING<=x&&x<=BlinkTheGame.GAME_WIDTH-CHR_WIDTH-PADDING &&
@@ -118,10 +120,8 @@ public class Enemy {
 		else if (this.y>BlinkTheGame.GAME_HEIGHT-CHR_HEIGHT-PADDING) { // Start at Down side
 			targetDegree = -90;
 		}
-		else {
-			
-		}
 	}
+	
 	private void run () {
 		double radians = Math.toRadians(this.degree);
 		double cos = Math.cos(radians);
@@ -146,10 +146,11 @@ public class Enemy {
 		double degreeChange = randomTurnDegree();
 		int tempDegree = (int)(degreeChange/TURN_SPEED);
 		double desiredTurnDegree = tempDegree * TURN_SPEED;
+		
 		this.targetDegree = this.degree + desiredTurnDegree;
-		System.out.println("targetDegree: "+targetDegree);
 		if (this.targetDegree<-180) this.targetDegree += 360.0;
 		else if (this.targetDegree>180) this.targetDegree -= 360.0;
+		
 		movementMode = MODE_TURNING;
 	}
 	
@@ -159,6 +160,7 @@ public class Enemy {
 		else temp += DEG_LIMIT;
 		return temp;
 	}
+	
 	private double randomRunDistance () {
 		double temp = Math.random() * RUN_RANDOM_RANGE * 2 - RUN_RANDOM_RANGE;
 		temp += RUN_INTO_LIMIT;
@@ -173,19 +175,24 @@ public class Enemy {
 			return false;
 		}
 	}
+	
 	private void turning () {
-		System.out.println("target:"+targetDegree+" current:"+degree);
 		if (degree>targetDegree) {
 			this.degree -= TURN_SPEED;
 		}
 		else {
 			this.degree += TURN_SPEED;
 		}
+		
 		if (degree<-180) {
 			degree += 360;
 		}
 		else if (degree>180) {
 			degree -= 360;
+		}
+
+		if (checkTurnEnd()) {
+			movementMode = MODE_RUNNING;
 		}
 	}
 }

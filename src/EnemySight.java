@@ -9,5 +9,6 @@ public class EnemySight {
 	
 	public EnemySight(Enemy enemy, String enemyType) throws SlickException {
 		this.enemy = enemy;
+		this.image = new Image ("res/"+enemyType+"-sight.png");	
 	}
 }
