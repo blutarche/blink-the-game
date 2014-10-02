@@ -24,6 +24,15 @@ public class EnemySight {
 		this.x = enemy.x+Enemy.CHR_WIDTH/2;
 		this.y = enemy.y+Enemy.CHR_HEIGHT/2;
 		this.degree = enemy.degree;
+		
+		isSawNinja();
+	}
+	
+	private void isSawNinja () {
+		double diffX = this.x - BlinkTheGame.ninja.x;
+		double diffY = this.y - BlinkTheGame.ninja.y;
+		double distance = Math.sqrt(diffX*diffX + diffY*diffY);
+		System.out.println("sightDistance = "+distance);
 	}
 	
 	public void render () {

@@ -9,12 +9,14 @@ import org.newdawn.slick.geom.Point;
 
 public class BlinkTheGame extends BasicGame {
 
-	public static final int GAME_WIDTH 	= 1366;
-	public static final int GAME_HEIGHT = 768;
-	public static final int STUPID_COUNT = 5;
+	public static final int GAME_WIDTH 	= 800;
+	public static final int GAME_HEIGHT = 600;
+	public static final int STUPID_COUNT = 1;
 	
-	private Ninja ninja;
-	private StupidOne[] stupids = new StupidOne[STUPID_COUNT];
+	private float [] eiei = new float [] {1, 2, 3, 4, 5, 6 };
+	
+	public static Ninja ninja;
+	private static StupidOne[] stupids = new StupidOne[STUPID_COUNT];
 	
 	public static int mouseX, mouseY;
 	

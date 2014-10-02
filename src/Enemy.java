@@ -14,7 +14,7 @@ public class Enemy {
 	
 	public static final int CHR_WIDTH  = 30;
 	public static final int CHR_HEIGHT = 30;
-	public static final double PADDING = 70;
+	public static final double PADDING = 0;
 	
 	private double targetDegree;
 	private double distanceGoing;
