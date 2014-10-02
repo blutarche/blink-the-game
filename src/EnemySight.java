@@ -1,3 +1,5 @@
+import java.time.temporal.TemporalQueries;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -29,10 +31,30 @@ public class EnemySight {
 	}
 	
 	private void isSawNinja () {
-		double diffX = this.x - BlinkTheGame.ninja.x;
-		double diffY = this.y - BlinkTheGame.ninja.y;
+		if (isNinjaWithinDegree() && isNinjaWithinDistance() ) {
+			System.out.println("OMGGGGGG!");
+		}
+	}
+	
+	private boolean isNinjaWithinDegree () {
+		double tempSightDegree = degree;
+		if (tempSightDegree<0) tempSightDegree += 360;
+		double diffX = BlinkTheGame.ninja.x - this.x;
+		double diffY = BlinkTheGame.ninja.y - this.y;
+		double angle = Math.toDegrees(Math.atan2(diffY, diffX));
+		if (angle<0) angle += 360;
+		System.out.println("angle="+angle+" degree="+tempSightDegree);
+		if (Math.abs(angle-tempSightDegree) <= detectDegree/2) return true;
+		else return false;
+	}
+	
+	private boolean isNinjaWithinDistance () {
+		double diffX = BlinkTheGame.ninja.x - this.x;
+		double diffY = BlinkTheGame.ninja.y - this.y;
 		double distance = Math.sqrt(diffX*diffX + diffY*diffY);
-		System.out.println("sightDistance = "+distance);
+		//System.out.println("sightDistance = "+distance);
+		if (distance <= range) return true;
+		else return false;
 	}
 	
 	public void render () {
