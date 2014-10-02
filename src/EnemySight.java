@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 public class EnemySight {
 
 	private Image image;
+	private Image imageDetected;
 	private Enemy enemy;
 	
 	private float x, y;
@@ -15,11 +16,15 @@ public class EnemySight {
 	private double detectDegree;
 	private float degree;
 	
+	private boolean ninjaDetected;
+	
 	public EnemySight(Enemy enemy, String enemyType, double range, double degree) throws SlickException {
 		this.enemy = enemy;
 		this.image = new Image("res/"+enemyType+"-sight.png");
+		this.imageDetected = new Image("res/"+enemyType+"-sight-detected.png");
 		this.range = range;
 		this.detectDegree = degree;
+		this.ninjaDetected = false;
 	}
 	
 	public void update () {
@@ -32,7 +37,10 @@ public class EnemySight {
 	
 	private void isSawNinja () {
 		if (isNinjaWithinDegree() && isNinjaWithinDistance() ) {
-			System.out.println("OMGGGGGG!");
+			ninjaDetected = true;
+		}
+		else {
+			ninjaDetected = false;
 		}
 	}
 	
@@ -58,8 +66,15 @@ public class EnemySight {
 	}
 	
 	public void render () {
-	    image.setCenterOfRotation((int)range, (int)range);
-		image.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
-		image.setRotation(degree);
+		if (!ninjaDetected) {
+		    image.setCenterOfRotation((int)range, (int)range);
+			image.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
+			image.setRotation(degree);
+		}
+		else {
+		    imageDetected.setCenterOfRotation((int)range, (int)range);
+			imageDetected.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
+			imageDetected.setRotation(degree);
+		}
 	}
 }
