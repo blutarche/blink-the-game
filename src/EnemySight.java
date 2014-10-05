@@ -12,6 +12,9 @@ public class EnemySight {
 	
 	private float x, y;
 	
+	private float attackDelay;
+	
+	private static final float ATTACK_COOLDOWN = 120.0f;
 	private double range;
 	private double detectDegree;
 	private float degree;
@@ -25,19 +28,24 @@ public class EnemySight {
 		this.range = range;
 		this.detectDegree = degree;
 		this.ninjaDetected = false;
+		this.attackDelay = ATTACK_COOLDOWN;
 	}
 	
 	public void update () {
 		this.x = enemy.x+Enemy.CHR_WIDTH/2;
 		this.y = enemy.y+Enemy.CHR_HEIGHT/2;
 		this.degree = enemy.degree;
+		if (attackDelay<ATTACK_COOLDOWN) this.attackDelay++;
 		
 		isSawNinja();
 	}
 	
 	private void isSawNinja () {
 		if (isNinjaWithinDegree() && isNinjaWithinDistance() ) {
-			BlinkTheGame.ninja.detected();
+			if (attackDelay==ATTACK_COOLDOWN) {
+				attackDelay = 0;
+				BlinkTheGame.ninja.detected();
+			}
 			ninjaDetected = true;
 		}
 		else {

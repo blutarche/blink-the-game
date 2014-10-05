@@ -14,7 +14,7 @@ public class Ninja {
 	private static final int CHR_WIDTH 	= 30;
 	private static final int CHR_HEIGHT = 30;
 	
-	public int hp;
+	public int hp; public boolean isBeingSeen;
 	
 	private boolean left;	private boolean right;
 	private boolean up;		private boolean down;
@@ -24,6 +24,7 @@ public class Ninja {
 	    this.y = y;
 	    this.v = 2;
 	    this.hp = 10;
+	    this.isBeingSeen = false;
 	    image = new Image("res/ninja-dot.png");
 	}
 
@@ -96,10 +97,22 @@ public class Ninja {
 	public void attack () {
 		
 	}
+	public void decreaseHP (int damage) {
+		this.hp -= damage;
+	}
 	public void blink (int mouseX, int mouseY) {
 		this.x = mouseX-CHR_WIDTH/2;
 		this.y = mouseY-CHR_HEIGHT/2;
+	    removeDetectStatus();
+	}
+	public void removeDetectStatus () {
+	    this.isBeingSeen = false;
+	}
+	public void applyDetectStatus () {
+	    this.isBeingSeen = true;
 	}
 	public void detected () {
+		decreaseHP(1);
+		applyDetectStatus();
 	}
 }

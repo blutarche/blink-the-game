@@ -29,6 +29,8 @@ public class Enemy {
 	private final int MODE_RUNNING = 1;
 	private final int MODE_TURNSTART = 2;
 	private final int MODE_TURNING = 3; 
+	private final int MODE_CHASING_RUN = 4;
+	private final int MODE_CHASING_STARTTURNING = 5;
 	
 	private int movementMode;
 	
@@ -62,6 +64,10 @@ public class Enemy {
 	}
 	
 	private void move () {
+		normalMovement();
+	}
+	
+	private void normalMovement () {
 		checkRunEnd();
 		if (movementMode == MODE_OFFSCREEN) {
 			offscreenMovement();
@@ -74,6 +80,12 @@ public class Enemy {
 		}
 		else if (movementMode == MODE_TURNING){
 			turning();
+		}
+		else if (movementMode == MODE_CHASING_STARTTURNING) {
+			
+		}
+		else if (movementMode == MODE_CHASING_RUN) {
+			
 		}
 	}
 	
