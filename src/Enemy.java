@@ -29,8 +29,7 @@ public class Enemy {
 	private final int MODE_RUNNING = 1;
 	private final int MODE_TURNSTART = 2;
 	private final int MODE_TURNING = 3; 
-	private final int MODE_CHASING_RUN = 4;
-	private final int MODE_CHASING_STARTTURNING = 5;
+	private final int MODE_CHASING = 4;
 	
 	private int movementMode;
 	
@@ -64,7 +63,20 @@ public class Enemy {
 	}
 	
 	private void move () {
-		normalMovement();
+		if (BlinkTheGame.ninja.isBeingSeen) {
+			movementMode = 4;
+			chasingMovement();
+		}
+		else {
+			normalMovement();
+		}
+	}
+	
+	private void chasingMovement () {
+		if (movementMode == MODE_CHASING) {
+			adjustDegreeToNinja(); 
+			runWithOutChecking();
+		}
 	}
 	
 	private void normalMovement () {
@@ -80,12 +92,6 @@ public class Enemy {
 		}
 		else if (movementMode == MODE_TURNING){
 			turning();
-		}
-		else if (movementMode == MODE_CHASING_STARTTURNING) {
-			
-		}
-		else if (movementMode == MODE_CHASING_RUN) {
-			
 		}
 	}
 	
@@ -108,7 +114,16 @@ public class Enemy {
 			movementMode = MODE_RUNNING;
 		}
 	}
-	
+	private void adjustDegreeToNinja() {
+		float ninjaX = (float)BlinkTheGame.ninja.x;
+		float ninjaY = (float)BlinkTheGame.ninja.y;
+		float xDistance = ninjaX - this.x;
+		float yDistance = ninjaY - this.y;
+		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+		int tempDegree = (int)(angleToTurn/TURN_SPEED);
+		double desiredTurnDegree = tempDegree * TURN_SPEED;
+		this.degree = (float)desiredTurnDegree;
+	}
 	private void adjustHeadDirection () {
 		image.setRotation(degree);
 	}
@@ -139,13 +154,16 @@ public class Enemy {
 	}
 	
 	private void run () {
+		runWithOutChecking();
+		checkRunEnd();
+	}
+	private void runWithOutChecking() {
 		double radians = Math.toRadians(this.degree);
 		double cos = Math.cos(radians);
 		double sin = Math.sin(radians);
 		this.x += this.v*cos;
 		this.y += this.v*sin;	
-		distanceGoing+=this.v;
-		checkRunEnd();
+		distanceGoing+=this.v;	
 	}
 	
 	private boolean checkRunEnd () {
