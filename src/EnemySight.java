@@ -37,6 +37,7 @@ public class EnemySight {
 	
 	private void isSawNinja () {
 		if (isNinjaWithinDegree() && isNinjaWithinDistance() ) {
+			BlinkTheGame.ninja.detected();
 			ninjaDetected = true;
 		}
 		else {
@@ -51,7 +52,6 @@ public class EnemySight {
 		double diffY = BlinkTheGame.ninja.y - this.y;
 		double angle = Math.toDegrees(Math.atan2(diffY, diffX));
 		if (angle<0) angle += 360;
-		System.out.println("angle="+angle+" degree="+tempSightDegree);
 		if (Math.abs(angle-tempSightDegree) <= detectDegree/2) return true;
 		else return false;
 	}
@@ -60,7 +60,6 @@ public class EnemySight {
 		double diffX = BlinkTheGame.ninja.x - this.x;
 		double diffY = BlinkTheGame.ninja.y - this.y;
 		double distance = Math.sqrt(diffX*diffX + diffY*diffY);
-		//System.out.println("sightDistance = "+distance);
 		if (distance <= range) return true;
 		else return false;
 	}
@@ -68,13 +67,13 @@ public class EnemySight {
 	public void render () {
 		if (!ninjaDetected) {
 		    image.setCenterOfRotation((int)range, (int)range);
-			image.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
 			image.setRotation(degree);
+			image.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
 		}
 		else {
 		    imageDetected.setCenterOfRotation((int)range, (int)range);
-			imageDetected.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
 			imageDetected.setRotation(degree);
+			imageDetected.draw((int)(x-range), (int)(y-range), (int)range*2, (int)range*2);
 		}
 	}
 }

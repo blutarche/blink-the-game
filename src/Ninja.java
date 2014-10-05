@@ -14,6 +14,8 @@ public class Ninja {
 	private static final int CHR_WIDTH 	= 30;
 	private static final int CHR_HEIGHT = 30;
 	
+	public int hp;
+	
 	private boolean left;	private boolean right;
 	private boolean up;		private boolean down;
 	 
@@ -21,6 +23,7 @@ public class Ninja {
 	    this.x = x;
 	    this.y = y;
 	    this.v = 2;
+	    this.hp = 10;
 	    image = new Image("res/ninja-dot.png");
 	}
 
@@ -96,5 +99,7 @@ public class Ninja {
 	public void blink (int mouseX, int mouseY) {
 		this.x = mouseX-CHR_WIDTH/2;
 		this.y = mouseY-CHR_HEIGHT/2;
+	}
+	public void detected () {
 	}
 }

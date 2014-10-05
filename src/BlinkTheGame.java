@@ -11,7 +11,7 @@ public class BlinkTheGame extends BasicGame {
 
 	public static final int GAME_WIDTH 	= 800;
 	public static final int GAME_HEIGHT = 600;
-	public static final int STUPID_COUNT = 1;
+	public static final int STUPID_COUNT = 10;
 	
 	private float [] eiei = new float [] {1, 2, 3, 4, 5, 6 };
 	
@@ -44,6 +44,7 @@ public class BlinkTheGame extends BasicGame {
 			stupids[i].render();
 		}
 		ninja.render();
+		g.drawString("Ninja HP: "+ninja.hp,15,30);
 		//cursor.render();
 	}
 
