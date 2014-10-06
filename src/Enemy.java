@@ -217,7 +217,7 @@ public class Enemy {
 		} else {
 			this.degree += TURN_SPEED;
 		}
-
+		
 		if (degree < -180) {
 			degree += 360;
 		} else if (degree > 180) {
