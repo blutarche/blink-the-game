@@ -3,7 +3,7 @@ import org.newdawn.slick.SlickException;
 
 public class StupidOne extends Enemy {
 
-	private final static float RUN_SPEED = 1f;
+	private final static float RUN_SPEED = 1.5f;
 	private final static double RANGE_OF_SIGHT = 120;
 	private final static double DEGREE_OF_SIGHT = 90; 
 	

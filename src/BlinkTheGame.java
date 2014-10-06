@@ -11,9 +11,9 @@ public class BlinkTheGame extends BasicGame {
 
 	public static final int GAME_WIDTH 	= 800;
 	public static final int GAME_HEIGHT = 600;
-	public static final int STUPID_COUNT = 10;
+	public static final int STUPID_COUNT = 5;
 	
-	private float [] eiei = new float [] {1, 2, 3, 4, 5, 6 };
+	public static float difficulty = 0.5f;
 	
 	public static Ninja ninja;
 	private static StupidOne[] stupids = new StupidOne[STUPID_COUNT];
@@ -44,7 +44,8 @@ public class BlinkTheGame extends BasicGame {
 			stupids[i].render();
 		}
 		ninja.render();
-		g.drawString("Ninja HP: "+ninja.hp,15,30);
+		g.drawString("Ninja HP: "+ninja.hp,10,30);
+		g.drawString("Difficulty: "+difficulty,10,50);
 		//cursor.render();
 	}
 
@@ -91,6 +92,7 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void update(GameContainer container, int val) throws SlickException {
 		ninja.update(container);
+		difficulty += 0.0001f;
 		for (int i=0;i<STUPID_COUNT;i++) {
 			stupids[i].update();
 		}

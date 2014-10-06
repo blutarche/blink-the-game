@@ -58,6 +58,7 @@ public class Enemy {
 	}
 	
 	public void update () {
+		this.v = BlinkTheGame.difficulty;
 		this.move();
 		sight.update();
 	}
@@ -65,6 +66,7 @@ public class Enemy {
 	private void move () {
 		if (BlinkTheGame.ninja.isBeingSeen) {
 			movementMode = 4;
+			distanceGoing = RUN_LIMIT;
 			chasingMovement();
 		}
 		else {
