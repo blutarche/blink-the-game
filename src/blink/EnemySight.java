@@ -82,15 +82,20 @@ public class EnemySight {
 
 	public void render() {
 		if (!ninjaDetected) {
-			image.setCenterOfRotation((int) range, (int) range);
-			image.setRotation(degree);
-			image.draw((int) (x - range), (int) (y - range), (int) range * 2,
-					(int) range * 2);
+			renderNormalSight();
 		} else {
-			imageDetected.setCenterOfRotation((int) range, (int) range);
-			imageDetected.setRotation(degree);
-			imageDetected.draw((int) (x - range), (int) (y - range),
-					(int) range * 2, (int) range * 2);
+			renderDetectedSight();
 		}
+	}
+	
+	private void renderNormalSight () {
+		image.setCenterOfRotation((int) range, (int) range);
+		image.setRotation(degree);
+		image.draw((int) (x - range), (int) (y - range), (int) range * 2, (int) range * 2);
+	}
+	private void renderDetectedSight () {
+		imageDetected.setCenterOfRotation((int) range, (int) range);
+		imageDetected.setRotation(degree);
+		imageDetected.draw((int) (x - range), (int) (y - range), (int) range * 2, (int) range * 2);
 	}
 }

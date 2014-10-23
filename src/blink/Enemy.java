@@ -1,4 +1,5 @@
 package blink;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -7,6 +8,10 @@ public class Enemy {
 	private Image image;
 	private EnemySight sight;
 
+	enum MovementMode {
+		MODE_OFFSCREEN, MODE_RUNNING, MODE_TURNSTART, MODE_TURNING, MODE_CHASING
+	};
+	
 	public float x;
 	public float y;
 	public float v;
@@ -27,13 +32,7 @@ public class Enemy {
 	private final double DEG_LIMIT = 50.0;
 	private final double TURN_SPEED = 0.5;
 
-	private final int MODE_OFFSCREEN = 0;
-	private final int MODE_RUNNING = 1;
-	private final int MODE_TURNSTART = 2;
-	private final int MODE_TURNING = 3;
-	private final int MODE_CHASING = 4;
-
-	private int movementMode;
+	private MovementMode movementMode;
 
 	public Enemy(float x, float y, float v, double sightRange,
 			double sightDegree, String enemyType) throws SlickException {
@@ -42,7 +41,7 @@ public class Enemy {
 		this.v = v;
 
 		image = new Image("res/" + enemyType + ".png");
-		movementMode = MODE_OFFSCREEN;
+		movementMode = MovementMode.MODE_OFFSCREEN;
 		distanceGoing = 0;
 		degree = 0;
 
@@ -67,7 +66,7 @@ public class Enemy {
 
 	private void move() {
 		if (BlinkTheGame.ninja.isBeingSeen) {
-			movementMode = 4;
+			movementMode = MovementMode.MODE_CHASING;
 			distanceGoing = RUN_LIMIT;
 			chasingMovement();
 		} else {
@@ -76,7 +75,7 @@ public class Enemy {
 	}
 
 	private void chasingMovement() {
-		if (movementMode == MODE_CHASING) {
+		if (movementMode == MovementMode.MODE_CHASING) {
 			adjustDegreeToNinja();
 			runWithOutChecking();
 		}
@@ -84,13 +83,13 @@ public class Enemy {
 
 	private void normalMovement() {
 		checkRunEnd();
-		if (movementMode == MODE_OFFSCREEN) {
+		if (movementMode == MovementMode.MODE_OFFSCREEN) {
 			offscreenMovement();
-		} else if (movementMode == MODE_RUNNING) {
+		} else if (movementMode == MovementMode.MODE_RUNNING) {
 			runNormal();
-		} else if (movementMode == MODE_TURNSTART) {
+		} else if (movementMode == MovementMode.MODE_TURNSTART) {
 			turnStart();
-		} else if (movementMode == MODE_TURNING) {
+		} else if (movementMode == MovementMode.MODE_TURNING) {
 			turning();
 		}
 	}
@@ -98,7 +97,7 @@ public class Enemy {
 	private void runNormal() {
 		run();
 		if (isOffScreen()) {
-			movementMode = MODE_OFFSCREEN;
+			movementMode = MovementMode.MODE_OFFSCREEN;
 		}
 	}
 
@@ -109,7 +108,7 @@ public class Enemy {
 		} else if (!isOffScreen()) {
 			run();
 		} else {
-			movementMode = MODE_RUNNING;
+			movementMode = MovementMode.MODE_RUNNING;
 		}
 	}
 
@@ -167,7 +166,7 @@ public class Enemy {
 
 	private boolean checkRunEnd() {
 		if (distanceGoing >= RUN_LIMIT) {
-			movementMode = MODE_TURNSTART;
+			movementMode = MovementMode.MODE_TURNSTART;
 			distanceGoing = 0;
 			RUN_LIMIT = randomRunDistance();
 			return true;
@@ -181,12 +180,9 @@ public class Enemy {
 		double desiredTurnDegree = tempDegree * TURN_SPEED;
 
 		this.targetDegree = this.degree + desiredTurnDegree;
-		if (this.targetDegree < -180)
-			this.targetDegree += 360.0;
-		else if (this.targetDegree > 180)
-			this.targetDegree -= 360.0;
+		targetDegree = adjustDegree((float) targetDegree);
 
-		movementMode = MODE_TURNING;
+		movementMode = MovementMode.MODE_TURNING;
 	}
 
 	private double randomTurnDegree() {
@@ -218,15 +214,18 @@ public class Enemy {
 		} else {
 			this.degree += TURN_SPEED;
 		}
-		
-		if (degree < -180) {
-			degree += 360;
-		} else if (degree > 180) {
-			degree -= 360;
-		}
-
+		degree = adjustDegree(degree);
 		if (checkTurnEnd()) {
-			movementMode = MODE_RUNNING;
+			movementMode = MovementMode.MODE_RUNNING;
 		}
+	}
+
+	private float adjustDegree(float unfinishedDegree) {
+		if (unfinishedDegree < -180.0) {
+			unfinishedDegree += 360.0;
+		} else if (unfinishedDegree > 180.0) {
+			unfinishedDegree -= 360.0;
+		}
+		return unfinishedDegree;
 	}
 }
