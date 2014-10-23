@@ -1,3 +1,4 @@
+package blink;
 import java.time.temporal.TemporalQueries;
 
 import org.newdawn.slick.Image;
