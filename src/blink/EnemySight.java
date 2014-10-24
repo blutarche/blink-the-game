@@ -9,19 +9,14 @@ public class EnemySight extends Sight {
 	private Image imageDetected;
 	private Enemy enemy;
 
-	private float x, y;
-
 	private float attackDelay;
-
 	private static final float ATTACK_COOLDOWN = 120.0f;
-	private double range;
-	private double detectDegree;
-	private float degree;
 
 	private boolean ninjaDetected;
 
 	public EnemySight(Enemy enemy, String enemyType, double range, double degree)
 			throws SlickException {
+		super(enemy, range, degree);
 		this.enemy = enemy;
 		this.image = new Image("res/" + enemyType + "-sight.png");
 		this.imageDetected = new Image("res/" + enemyType
@@ -33,9 +28,7 @@ public class EnemySight extends Sight {
 	}
 
 	public void update() {
-		this.x = enemy.x + Enemy.CHR_WIDTH / 2;
-		this.y = enemy.y + Enemy.CHR_HEIGHT / 2;
-		this.degree = enemy.degree;
+		update(enemy.degree,  enemy.x + Enemy.CHR_WIDTH / 2,  enemy.y + Enemy.CHR_HEIGHT / 2);
 		if (attackDelay < ATTACK_COOLDOWN) {
 			this.attackDelay++;
 		}
@@ -81,23 +74,9 @@ public class EnemySight extends Sight {
 
 	public void render() {
 		if (!ninjaDetected) {
-			renderNormalSight();
+			render(image);
 		} else {
-			renderDetectedSight();
+			render(imageDetected);
 		}
-	}
-
-	private void renderNormalSight() {
-		image.setCenterOfRotation((int) range, (int) range);
-		image.setRotation(degree);
-		image.draw((int) (x - range), (int) (y - range), (int) range * 2,
-				(int) range * 2);
-	}
-
-	private void renderDetectedSight() {
-		imageDetected.setCenterOfRotation((int) range, (int) range);
-		imageDetected.setRotation(degree);
-		imageDetected.draw((int) (x - range), (int) (y - range),
-				(int) range * 2, (int) range * 2);
 	}
 }
