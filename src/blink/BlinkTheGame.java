@@ -1,4 +1,5 @@
 package blink;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -13,7 +14,8 @@ public class BlinkTheGame extends BasicGame {
 	public static final int GAME_WIDTH = 800;
 	public static final int GAME_HEIGHT = 600;
 	public static final int STUPID_COUNT = 5;
-	public static final float DIFFICULTY_INTERVAL = 0.0001f;
+	public static final float DIFFICULTY_INTERVAL = 0.00005f;
+	public static final float DIFFICULTY_LIMIT = 2.5f;
 
 	public static float difficulty = 0.5f;
 
@@ -99,11 +101,18 @@ public class BlinkTheGame extends BasicGame {
 	}
 
 	@Override
-	public void update(GameContainer container, int val) throws SlickException {
+	public void update(GameContainer container, int delta)
+			throws SlickException {
 		ninja.update(container);
-		difficulty += DIFFICULTY_INTERVAL;
+		difficultyIncrease();
 		for (int i = 0; i < STUPID_COUNT; i++) {
 			stupids[i].update();
+		}
+	}
+
+	private void difficultyIncrease() {
+		if (difficulty < DIFFICULTY_LIMIT) {
+			difficulty += DIFFICULTY_INTERVAL;
 		}
 	}
 

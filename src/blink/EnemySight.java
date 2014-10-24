@@ -1,10 +1,9 @@
 package blink;
-import java.time.temporal.TemporalQueries;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public class EnemySight {
+public class EnemySight extends Sight {
 
 	private Image image;
 	private Image imageDetected;
@@ -37,9 +36,9 @@ public class EnemySight {
 		this.x = enemy.x + Enemy.CHR_WIDTH / 2;
 		this.y = enemy.y + Enemy.CHR_HEIGHT / 2;
 		this.degree = enemy.degree;
-		if (attackDelay < ATTACK_COOLDOWN)
+		if (attackDelay < ATTACK_COOLDOWN) {
 			this.attackDelay++;
-
+		}
 		isSawNinja();
 	}
 
@@ -87,15 +86,18 @@ public class EnemySight {
 			renderDetectedSight();
 		}
 	}
-	
-	private void renderNormalSight () {
+
+	private void renderNormalSight() {
 		image.setCenterOfRotation((int) range, (int) range);
 		image.setRotation(degree);
-		image.draw((int) (x - range), (int) (y - range), (int) range * 2, (int) range * 2);
+		image.draw((int) (x - range), (int) (y - range), (int) range * 2,
+				(int) range * 2);
 	}
-	private void renderDetectedSight () {
+
+	private void renderDetectedSight() {
 		imageDetected.setCenterOfRotation((int) range, (int) range);
 		imageDetected.setRotation(degree);
-		imageDetected.draw((int) (x - range), (int) (y - range), (int) range * 2, (int) range * 2);
+		imageDetected.draw((int) (x - range), (int) (y - range),
+				(int) range * 2, (int) range * 2);
 	}
 }

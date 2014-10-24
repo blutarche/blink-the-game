@@ -1,4 +1,5 @@
 package blink;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -7,12 +8,16 @@ import org.newdawn.slick.SlickException;
 public class Ninja {
 
 	private Image image;
+	private NinjaSight sight;
 
 	public float x;
 	public float y;
 	public float v;
+	public float degree;
 	private static final int CHR_WIDTH = 30;
 	private static final int CHR_HEIGHT = 30;
+	private final static double RANGE_OF_SIGHT = 50;
+	private final static double DEGREE_OF_SIGHT = 90;
 
 	public int hp;
 	public boolean isBeingSeen;
@@ -28,6 +33,7 @@ public class Ninja {
 		this.v = 2;
 		this.hp = 10;
 		this.isBeingSeen = false;
+		sight = new NinjaSight(this, RANGE_OF_SIGHT, DEGREE_OF_SIGHT);
 		image = new Image("res/ninja-dot.png");
 	}
 
@@ -42,7 +48,8 @@ public class Ninja {
 		float xDistance = mouseX - x;
 		float yDistance = mouseY - y;
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
-		image.setRotation((float) angleToTurn);
+		this.degree = (float)angleToTurn;
+		image.setRotation(degree);
 	}
 
 	public void update(GameContainer container) {

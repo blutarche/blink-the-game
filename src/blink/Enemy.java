@@ -11,7 +11,7 @@ public class Enemy {
 	enum MovementMode {
 		MODE_OFFSCREEN, MODE_RUNNING, MODE_TURNSTART, MODE_TURNING, MODE_CHASING
 	};
-	
+
 	public float x;
 	public float y;
 	public float v;

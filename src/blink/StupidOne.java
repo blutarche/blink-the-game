@@ -1,4 +1,5 @@
 package blink;
+
 import org.newdawn.slick.SlickException;
 
 public class StupidOne extends Enemy {
