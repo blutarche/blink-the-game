@@ -38,6 +38,7 @@ public class Ninja {
 	}
 
 	public void render() {
+		sight.render();
 		image.draw(x, y, CHR_WIDTH, CHR_HEIGHT);
 		adjustHeadDirection();
 	}
@@ -53,12 +54,20 @@ public class Ninja {
 	}
 
 	public void update(GameContainer container) {
+		keyController(container);
+		changePosition();
+		adjustPosition();
+		sight.update();
+	}
+	
+	private void keyController (GameContainer container) {
 		Input input = container.getInput();
 		left = false;
 		right = false;
 		up = false;
 		down = false;
 		image.setCenterOfRotation(CHR_WIDTH / 2, CHR_HEIGHT / 2);
+		
 		if (input.isKeyDown(Input.KEY_A)) {
 			left = true;
 		}
@@ -71,8 +80,7 @@ public class Ninja {
 		if (input.isKeyDown(Input.KEY_S)) {
 			down = true;
 		}
-		changePosition();
-		adjustPosition();
+		
 	}
 
 	private void changePosition() {

@@ -29,6 +29,8 @@ public class Sight {
 	}
 	
 	protected void update (float degree, float x, float y) {
-		
+		this.degree = degree;
+		this.x = x;
+		this.y = y;
 	}
 }

@@ -18,10 +18,10 @@ public class NinjaSight extends Sight {
 	}
 
 	public void update() {
-		update(ninja.degree,  ninja.x + Enemy.CHR_WIDTH / 2,  ninja.y + Enemy.CHR_HEIGHT / 2);
+		super.update(ninja.degree,  ninja.x + Enemy.CHR_WIDTH / 2,  ninja.y + Enemy.CHR_HEIGHT / 2);
 	}
 
 	public void render() {
-		render(image);
+		super.render(image);
 	}
 }

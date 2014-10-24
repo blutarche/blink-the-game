@@ -28,7 +28,7 @@ public class EnemySight extends Sight {
 	}
 
 	public void update() {
-		update(enemy.degree,  enemy.x + Enemy.CHR_WIDTH / 2,  enemy.y + Enemy.CHR_HEIGHT / 2);
+		super.update(enemy.degree,  enemy.x + Enemy.CHR_WIDTH / 2,  enemy.y + Enemy.CHR_HEIGHT / 2);
 		if (attackDelay < ATTACK_COOLDOWN) {
 			this.attackDelay++;
 		}
@@ -74,9 +74,9 @@ public class EnemySight extends Sight {
 
 	public void render() {
 		if (!ninjaDetected) {
-			render(image);
+			super.render(image);
 		} else {
-			render(imageDetected);
+			super.render(imageDetected);
 		}
 	}
 }
