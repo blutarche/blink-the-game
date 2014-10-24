@@ -8,6 +8,7 @@ public class Sight {
 	protected Character owner;
 
 	protected float x, y;
+	private float realDetectX, realDetectY;
 
 	protected double range;
 	protected double detectDegree;
@@ -33,6 +34,15 @@ public class Sight {
 		this.degree = degree;
 		this.x = x;
 		this.y = y;
+		setRealDetectPosition();
+	}
+
+	private void setRealDetectPosition() {
+		double radians = Math.toRadians(this.degree);
+		double cos = Math.cos(radians);
+		double sin = Math.sin(radians);
+		this.realDetectX = (float) (this.x - (Character.CHR_WIDTH / 3) * cos);
+		this.realDetectY = (float) (this.y - (Character.CHR_WIDTH / 3) * sin);
 	}
 
 	protected boolean isObjectWithinSight(Character character) {
@@ -49,13 +59,14 @@ public class Sight {
 		if (tempSightDegree < 0) {
 			tempSightDegree += 360;
 		}
-		double diffX = character.x - this.x;
-		double diffY = character.y - this.y;
+		double diffX = character.x - this.realDetectX;
+		double diffY = character.y - this.realDetectY;
 		double angle = Math.toDegrees(Math.atan2(diffY, diffX));
 		if (angle < 0) {
 			angle += 360;
 		}
-		if (Math.abs(angle - tempSightDegree) <= (detectDegree + (DEGREE_DEBUG * 2)) / 2) {
+		if (Math.abs(angle - tempSightDegree) <= (detectDegree / 2)
+				+ DEGREE_DEBUG) {
 			return true;
 		} else {
 			return false;
@@ -78,12 +89,14 @@ public class Sight {
 	private boolean isObjectVeryNear(Character character) {
 		double diffX = character.x - owner.x;
 		double diffY = character.y - owner.y;
-		double distance = Math.sqrt(diffX * diffX + diffY * diffY);
+		double distance = Math.sqrt(diffX * diffX + diffY * diffY)
+				- (Character.CHR_HEIGHT / 2);
 
-		if (distance <= (Character.CHR_WIDTH / 2)) {
+		if (distance <= Character.CHR_WIDTH / 2) {
 			return true;
 		} else {
 			return false;
 		}
+
 	}
 }
