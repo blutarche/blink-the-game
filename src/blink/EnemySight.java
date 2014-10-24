@@ -28,7 +28,8 @@ public class EnemySight extends Sight {
 	}
 
 	public void update() {
-		super.update(enemy.degree,  enemy.x + Enemy.CHR_WIDTH / 2,  enemy.y + Enemy.CHR_HEIGHT / 2);
+		super.update(enemy.degree, enemy.x + Enemy.CHR_WIDTH / 2, enemy.y
+				+ Enemy.CHR_HEIGHT / 2);
 		if (attackDelay < ATTACK_COOLDOWN) {
 			this.attackDelay++;
 		}
@@ -39,13 +40,12 @@ public class EnemySight extends Sight {
 		if (isObjectWithinSight(BlinkTheGame.ninja)) {
 			attack();
 			ninjaDetected = true;
-		}
-		else {
+		} else {
 			ninjaDetected = false;
 		}
 	}
 
-	private void attack () {
+	private void attack() {
 		if (attackDelay == ATTACK_COOLDOWN) {
 			attackDelay = 0;
 			BlinkTheGame.ninja.detected();

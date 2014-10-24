@@ -16,13 +16,12 @@ public class BlinkTheGame extends BasicGame {
 	public static final int GAME_WIDTH = 800;
 	public static final int GAME_HEIGHT = 600;
 	public static final float DIFFICULTY_INTERVAL = 0.00005f;
-	public static final float DIFFICULTY_LIMIT = 2.5f;
+	public static final float DIFFICULTY_LIMIT = 0.5f;
 
 	public static float difficulty = 0.5f;
 
 	public static Ninja ninja;
-	public static ArrayList<StupidOne> stupids = new ArrayList<StupidOne>();// StupidOne[] stupids = new
-												// StupidOne[STUPID_COUNT];
+	public static ArrayList<StupidOne> stupids = new ArrayList<StupidOne>();
 
 	public static int STUPID_COUNT = 5;
 	public static int mouseX, mouseY;

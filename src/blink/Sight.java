@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 
 public class Sight {
 
-	protected Object owner;
+	protected Character owner;
 
 	protected float x, y;
 
@@ -13,7 +13,9 @@ public class Sight {
 	protected double detectDegree;
 	protected float degree;
 
-	public Sight(Object owner, double range, double degree)
+	private static final float DEGREE_DEBUG = 15.0f;
+
+	public Sight(Character owner, double range, double degree)
 			throws SlickException {
 		this.owner = owner;
 		this.range = range;
@@ -34,8 +36,8 @@ public class Sight {
 	}
 
 	protected boolean isObjectWithinSight(Character character) {
-		if (isObjectWithinDegree(character)
-				&& isObjectWithinDistance(character)) {
+		if ((isObjectWithinDegree(character) && isObjectWithinDistance(character))
+				|| isObjectVeryNear(character)) {
 			return true;
 		} else {
 			return false;
@@ -53,7 +55,7 @@ public class Sight {
 		if (angle < 0) {
 			angle += 360;
 		}
-		if (Math.abs(angle - tempSightDegree) <= detectDegree / 2) {
+		if (Math.abs(angle - tempSightDegree) <= (detectDegree + (DEGREE_DEBUG * 2)) / 2) {
 			return true;
 		} else {
 			return false;
@@ -61,12 +63,27 @@ public class Sight {
 	}
 
 	private boolean isObjectWithinDistance(Character character) {
-		double diffX = character.x - this.x;
-		double diffY = character.y - this.y;
-		double distance = Math.sqrt(diffX * diffX + diffY * diffY);
-		if (distance <= range)
+		double diffX = character.x - owner.x;
+		double diffY = character.y - owner.y;
+		double distance = Math.sqrt(diffX * diffX + diffY * diffY)
+				- (Character.CHR_HEIGHT / 2);
+
+		if (distance <= range) {
 			return true;
-		else
+		} else {
 			return false;
+		}
+	}
+
+	private boolean isObjectVeryNear(Character character) {
+		double diffX = character.x - owner.x;
+		double diffY = character.y - owner.y;
+		double distance = Math.sqrt(diffX * diffX + diffY * diffY);
+
+		if (distance <= (Character.CHR_WIDTH / 2)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
