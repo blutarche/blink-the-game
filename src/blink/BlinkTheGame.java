@@ -1,5 +1,7 @@
 package blink;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -13,15 +15,16 @@ public class BlinkTheGame extends BasicGame {
 
 	public static final int GAME_WIDTH = 800;
 	public static final int GAME_HEIGHT = 600;
-	public static final int STUPID_COUNT = 5;
 	public static final float DIFFICULTY_INTERVAL = 0.00005f;
 	public static final float DIFFICULTY_LIMIT = 2.5f;
 
 	public static float difficulty = 0.5f;
 
 	public static Ninja ninja;
-	private static StupidOne[] stupids = new StupidOne[STUPID_COUNT];
+	public static ArrayList<StupidOne> stupids = new ArrayList<StupidOne>();// StupidOne[] stupids = new
+												// StupidOne[STUPID_COUNT];
 
+	public static int STUPID_COUNT = 5;
 	public static int mouseX, mouseY;
 
 	public static void main(String[] args) {
@@ -45,8 +48,8 @@ public class BlinkTheGame extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		for (int i = 0; i < STUPID_COUNT; i++) {
-			stupids[i].render();
+		for (StupidOne stupid : stupids) {
+			stupid.render();
 		}
 		ninja.render();
 		g.drawString("Ninja HP: " + ninja.hp, 10, 30);
@@ -64,10 +67,10 @@ public class BlinkTheGame extends BasicGame {
 		for (int i = 0; i < STUPID_COUNT; i++) {
 			double randomSide = Math.random() * 4;
 			Point randomPos = randomPosition(randomSide);
-			stupids[i] = new StupidOne((float) randomPos.getX(),
+			StupidOne newEnemy = new StupidOne((float) randomPos.getX(),
 					(float) randomPos.getY());
+			stupids.add(newEnemy);
 		}
-
 	}
 
 	public Point randomPosition(double randomSide) {
@@ -105,8 +108,8 @@ public class BlinkTheGame extends BasicGame {
 			throws SlickException {
 		ninja.update(container);
 		difficultyIncrease();
-		for (int i = 0; i < STUPID_COUNT; i++) {
-			stupids[i].update();
+		for (StupidOne stupid : stupids) {
+			stupid.update();
 		}
 	}
 

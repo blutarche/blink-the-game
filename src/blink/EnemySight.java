@@ -32,44 +32,24 @@ public class EnemySight extends Sight {
 		if (attackDelay < ATTACK_COOLDOWN) {
 			this.attackDelay++;
 		}
-		isSawNinja();
+		searchNinja();
 	}
 
-	private void isSawNinja() {
-		if (isNinjaWithinDegree() && isNinjaWithinDistance()) {
-			if (attackDelay == ATTACK_COOLDOWN) {
-				attackDelay = 0;
-				BlinkTheGame.ninja.detected();
-			}
+	private void searchNinja() {
+		if (isObjectWithinSight(BlinkTheGame.ninja)) {
+			attack();
 			ninjaDetected = true;
-		} else {
+		}
+		else {
 			ninjaDetected = false;
 		}
 	}
 
-	private boolean isNinjaWithinDegree() {
-		double tempSightDegree = degree;
-		if (tempSightDegree < 0)
-			tempSightDegree += 360;
-		double diffX = BlinkTheGame.ninja.x - this.x;
-		double diffY = BlinkTheGame.ninja.y - this.y;
-		double angle = Math.toDegrees(Math.atan2(diffY, diffX));
-		if (angle < 0)
-			angle += 360;
-		if (Math.abs(angle - tempSightDegree) <= detectDegree / 2)
-			return true;
-		else
-			return false;
-	}
-
-	private boolean isNinjaWithinDistance() {
-		double diffX = BlinkTheGame.ninja.x - this.x;
-		double diffY = BlinkTheGame.ninja.y - this.y;
-		double distance = Math.sqrt(diffX * diffX + diffY * diffY);
-		if (distance <= range)
-			return true;
-		else
-			return false;
+	private void attack () {
+		if (attackDelay == ATTACK_COOLDOWN) {
+			attackDelay = 0;
+			BlinkTheGame.ninja.detected();
+		}
 	}
 
 	public void render() {

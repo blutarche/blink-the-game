@@ -5,18 +5,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-public class Ninja {
+public class Ninja extends Character {
 
-	private Image image;
 	private NinjaSight sight;
 
-	public float x;
-	public float y;
-	public float v;
-	public float degree;
-	private static final int CHR_WIDTH = 30;
-	private static final int CHR_HEIGHT = 30;
-	private final static double RANGE_OF_SIGHT = 50;
+	private final static double RANGE_OF_SIGHT = 60;
 	private final static double DEGREE_OF_SIGHT = 90;
 
 	public int hp;
@@ -33,24 +26,10 @@ public class Ninja {
 		this.v = 2;
 		this.hp = 10;
 		this.isBeingSeen = false;
-		sight = new NinjaSight(this, RANGE_OF_SIGHT, DEGREE_OF_SIGHT);
+		this.rangeOfSight = RANGE_OF_SIGHT;
+		this.degreeOfSight = DEGREE_OF_SIGHT;
+		sight = new NinjaSight(this, rangeOfSight, degreeOfSight);
 		image = new Image("res/ninja-dot.png");
-	}
-
-	public void render() {
-		sight.render();
-		image.draw(x, y, CHR_WIDTH, CHR_HEIGHT);
-		adjustHeadDirection();
-	}
-
-	private void adjustHeadDirection() {
-		float mouseX = (float) BlinkTheGame.mouseX;
-		float mouseY = (float) BlinkTheGame.mouseY;
-		float xDistance = mouseX - x;
-		float yDistance = mouseY - y;
-		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
-		this.degree = (float)angleToTurn;
-		image.setRotation(degree);
 	}
 
 	public void update(GameContainer container) {
@@ -58,16 +37,31 @@ public class Ninja {
 		changePosition();
 		adjustPosition();
 		sight.update();
+		setDegreeToCursor();
 	}
-	
-	private void keyController (GameContainer container) {
+
+	public void render() {
+		sight.render();
+		super.render();
+	}
+
+	private void setDegreeToCursor() {
+		float mouseX = (float) BlinkTheGame.mouseX;
+		float mouseY = (float) BlinkTheGame.mouseY;
+		float xDistance = mouseX - x;
+		float yDistance = mouseY - y;
+		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+		this.degree = (float) angleToTurn;
+	}
+
+	private void keyController(GameContainer container) {
 		Input input = container.getInput();
 		left = false;
 		right = false;
 		up = false;
 		down = false;
 		image.setCenterOfRotation(CHR_WIDTH / 2, CHR_HEIGHT / 2);
-		
+
 		if (input.isKeyDown(Input.KEY_A)) {
 			left = true;
 		}
@@ -80,49 +74,53 @@ public class Ninja {
 		if (input.isKeyDown(Input.KEY_S)) {
 			down = true;
 		}
-		
+
 	}
 
 	private void changePosition() {
+		float vSqrt = (float) (v * Math.sqrt(2));
 		if (left) {
 			if (up) {
-				x -= v;
-				y -= v;
+				setXY(x - v, y - v);
 			} else if (down) {
-				x -= v;
-				y += v;
-			} else
-				x -= v * Math.sqrt(2);
+				setXY(x - v, y + v);
+			} else {
+				setXY(x - vSqrt, y);
+			}
 		} else if (right) {
 			if (up) {
-				x += v;
-				y -= v;
+				setXY(x + v, y - v);
 			} else if (down) {
-				x += v;
-				y += v;
-			} else
-				x += v * Math.sqrt(2);
-		} else if (up)
-			y -= v * Math.sqrt(2);
-		else if (down)
-			y += v * Math.sqrt(2);
+				setXY(x + v, y + v);
+			} else {
+				setXY(x + vSqrt, y);
+			}
+		} else if (up) {
+			setXY(x, y - vSqrt);
+		} else if (down) {
+			setXY(x, y + vSqrt);
+		}
 	}
 
 	private void adjustPosition() {
 		int limitX = BlinkTheGame.GAME_WIDTH - CHR_WIDTH;
 		int limitY = BlinkTheGame.GAME_HEIGHT - CHR_HEIGHT;
-		if (x < 0)
+		if (x < 0) {
 			x = 0;
-		if (x > limitX)
+		}
+		if (x > limitX) {
 			x = limitX;
-		if (y < 0)
+		}
+		if (y < 0) {
 			y = 0;
-		if (y > limitY)
+		}
+		if (y > limitY) {
 			y = limitY;
+		}
 	}
 
 	public void attack() {
-
+		sight.attack();
 	}
 
 	public void decreaseHP(int damage) {
