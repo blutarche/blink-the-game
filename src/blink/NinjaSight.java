@@ -34,7 +34,7 @@ public class NinjaSight extends Sight {
 	public void attack() {
 		int indexOfEnemyFound = searchEnemy();
 		if (indexOfEnemyFound != -1) {
-			System.out.println(indexOfEnemyFound);
+			BlinkTheGame.killEnemy(indexOfEnemyFound);
 		}
 	}
 

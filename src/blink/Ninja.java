@@ -2,23 +2,18 @@ package blink;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 public class Ninja extends Character {
 
 	private NinjaSight sight;
 
-	private final static double RANGE_OF_SIGHT = 70;
+	private final static double RANGE_OF_SIGHT = 50;
 	private final static double DEGREE_OF_SIGHT = 90;
 
 	public int hp;
 	public boolean isBeingSeen;
 
-	private boolean left;
-	private boolean right;
-	private boolean up;
-	private boolean down;
 
 	public Ninja(float x, float y) throws SlickException {
 		this.x = x;
@@ -55,49 +50,31 @@ public class Ninja extends Character {
 	}
 
 	private void keyController(GameContainer container) {
-		Input input = container.getInput();
-		left = false;
-		right = false;
-		up = false;
-		down = false;
 		image.setCenterOfRotation(CHR_WIDTH / 2, CHR_HEIGHT / 2);
-
-		if (input.isKeyDown(Input.KEY_A)) {
-			left = true;
-		}
-		if (input.isKeyDown(Input.KEY_D)) {
-			right = true;
-		}
-		if (input.isKeyDown(Input.KEY_W)) {
-			up = true;
-		}
-		if (input.isKeyDown(Input.KEY_S)) {
-			down = true;
-		}
 
 	}
 
 	private void changePosition() {
 		float vSqrt = (float) (v * Math.sqrt(2));
-		if (left) {
-			if (up) {
+		if (BlinkTheGame.left) {
+			if (BlinkTheGame.up) {
 				setXY(x - v, y - v);
-			} else if (down) {
+			} else if (BlinkTheGame.down) {
 				setXY(x - v, y + v);
 			} else {
 				setXY(x - vSqrt, y);
 			}
-		} else if (right) {
-			if (up) {
+		} else if (BlinkTheGame.right) {
+			if (BlinkTheGame.up) {
 				setXY(x + v, y - v);
-			} else if (down) {
+			} else if (BlinkTheGame.down) {
 				setXY(x + v, y + v);
 			} else {
 				setXY(x + vSqrt, y);
 			}
-		} else if (up) {
+		} else if (BlinkTheGame.up) {
 			setXY(x, y - vSqrt);
-		} else if (down) {
+		} else if (BlinkTheGame.down) {
 			setXY(x, y + vSqrt);
 		}
 	}

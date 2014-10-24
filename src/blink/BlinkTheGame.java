@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 
@@ -16,15 +17,21 @@ public class BlinkTheGame extends BasicGame {
 	public static final int GAME_WIDTH = 800;
 	public static final int GAME_HEIGHT = 600;
 	public static final float DIFFICULTY_INTERVAL = 0.00005f;
-	public static final float DIFFICULTY_LIMIT = 0.5f;
+	public static final float DIFFICULTY_LIMIT = 2.5f;
 
 	public static float difficulty = 0.5f;
+	public static int score = 0;
 
 	public static Ninja ninja;
 	public static ArrayList<StupidOne> stupids = new ArrayList<StupidOne>();
 
 	public static int STUPID_COUNT = 5;
 	public static int mouseX, mouseY;
+	
+	public static boolean left;
+	public static boolean right;
+	public static boolean up;
+	public static boolean down;
 
 	public static void main(String[] args) {
 		try {
@@ -53,6 +60,7 @@ public class BlinkTheGame extends BasicGame {
 		ninja.render();
 		g.drawString("Ninja HP: " + ninja.hp, 10, 30);
 		g.drawString("Difficulty: " + difficulty, 10, 50);
+		g.drawString("Score: " + score, 10, 70);
 		// cursor.render();
 	}
 
@@ -106,16 +114,30 @@ public class BlinkTheGame extends BasicGame {
 	public void update(GameContainer container, int delta)
 			throws SlickException {
 		ninja.update(container);
-		difficultyIncrease();
 		for (StupidOne stupid : stupids) {
 			stupid.update();
 		}
+		Input input = container.getInput();
+		keyController(input);
+		difficultyIncrease();
+	}
+	
+	private void keyController (Input input) {
+		left = input.isKeyDown(Input.KEY_A);
+		right = input.isKeyDown(Input.KEY_D);
+		up = input.isKeyDown(Input.KEY_W);
+		down = input.isKeyDown(Input.KEY_S);
 	}
 
 	private void difficultyIncrease() {
 		if (difficulty < DIFFICULTY_LIMIT) {
 			difficulty += DIFFICULTY_INTERVAL;
 		}
+	}
+	
+	public static void killEnemy(int index) {
+		stupids.remove(index);
+		score++;
 	}
 
 	@Override
