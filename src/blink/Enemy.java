@@ -21,6 +21,7 @@ public class Enemy extends Character {
 	private final double RUN_RANDOM_RANGE = 30.0;
 	private final double DEG_LIMIT = 50.0;
 	private final double TURN_SPEED = 0.3;
+	private final float OFFSCREEN_SPEED = 1.0f;
 
 	private MovementMode movementMode;
 	private boolean isDead;
@@ -92,11 +93,8 @@ public class Enemy extends Character {
 
 	private void offscreenMovement() {
 		checkStartingPosition();
-		v = 1.0f;
 		if (!checkTurnEnd()) {
 			turning();
-		} else if (!isOffScreen()) {
-			run();
 		} else {
 			movementMode = MovementMode.RUNNING;
 		}
@@ -114,9 +112,8 @@ public class Enemy extends Character {
 	}
 
 	private boolean isOffScreen() {
-		if (Enemy.PADDING <= x
-				&& x <= BlinkTheGame.GAME_WIDTH - CHR_WIDTH - PADDING
-				&& Enemy.PADDING <= y
+		if (PADDING <= x && x <= BlinkTheGame.GAME_WIDTH - CHR_WIDTH - PADDING
+				&& PADDING <= y
 				&& y <= BlinkTheGame.GAME_HEIGHT - CHR_HEIGHT - PADDING) {
 			return false;
 		} else {
@@ -145,6 +142,9 @@ public class Enemy extends Character {
 		double radians = Math.toRadians(this.degree);
 		double cos = Math.cos(radians);
 		double sin = Math.sin(radians);
+		if (isOffScreen()) {
+			this.v = OFFSCREEN_SPEED;
+		}
 		this.x += this.v * cos;
 		this.y += this.v * sin;
 		distanceGoing += this.v;

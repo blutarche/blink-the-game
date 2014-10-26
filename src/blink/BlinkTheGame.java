@@ -218,7 +218,6 @@ public class BlinkTheGame extends BasicGame {
 	public void killEnemy(int index) throws SlickException {
 		stupids.remove(index);
 		score++;
-		System.out.println("Object removed");
 		spawnEnemy();
 	}
 
@@ -228,7 +227,6 @@ public class BlinkTheGame extends BasicGame {
 		StupidOne newEnemy = new StupidOne((float) randomPos.getX(),
 				(float) randomPos.getY());
 		stupids.add(newEnemy);
-		System.out.println("Enemy respawned");
 	}
 
 	@Override
