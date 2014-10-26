@@ -14,7 +14,6 @@ public class Ninja extends Character {
 	public int hp;
 	public boolean isBeingSeen;
 
-
 	public Ninja(float x, float y) throws SlickException {
 		this.x = x;
 		this.y = y;

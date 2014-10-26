@@ -1,6 +1,6 @@
 package blink;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -18,16 +18,17 @@ public class BlinkTheGame extends BasicGame {
 	public static final int GAME_HEIGHT = 600;
 	public static final float DIFFICULTY_INTERVAL = 0.00005f;
 	public static final float DIFFICULTY_LIMIT = 2.5f;
+	public static final float SPAWN_MARGIN = 150;
 
 	public static float difficulty = 0.5f;
 	public static int score = 0;
 
 	public static Ninja ninja;
-	public static ArrayList<StupidOne> stupids = new ArrayList<StupidOne>();
+	public static LinkedList<StupidOne> stupids = new LinkedList<StupidOne>();
 
 	public static int STUPID_COUNT = 5;
 	public static int mouseX, mouseY;
-	
+
 	public static boolean left;
 	public static boolean right;
 	public static boolean up;
@@ -71,12 +72,12 @@ public class BlinkTheGame extends BasicGame {
 		ninja = new Ninja(GAME_WIDTH / 2, GAME_HEIGHT / 2);
 		Image cursorImage = new Image("res/cursor-2.png");
 		container.setMouseCursor(cursorImage, 25, 25);
+		generateEnemy();
+	}
+
+	private void generateEnemy() throws SlickException {
 		for (int i = 0; i < STUPID_COUNT; i++) {
-			double randomSide = Math.random() * 4;
-			Point randomPos = randomPosition(randomSide);
-			StupidOne newEnemy = new StupidOne((float) randomPos.getX(),
-					(float) randomPos.getY());
-			stupids.add(newEnemy);
+			spawnEnemy();
 		}
 	}
 
@@ -86,12 +87,12 @@ public class BlinkTheGame extends BasicGame {
 		double randomX;
 		double randomY;
 		if (randomSide < 1) { // Left
-			randomX = -stupidWidth;
+			randomX = -stupidWidth-SPAWN_MARGIN;
 			randomY = Math.random()
 					* (GAME_HEIGHT - stupidHeight - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
 		} else if (randomSide < 2) { // Right
-			randomX = GAME_WIDTH;
+			randomX = GAME_WIDTH+SPAWN_MARGIN;
 			randomY = Math.random()
 					* (GAME_HEIGHT - stupidHeight - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
@@ -99,12 +100,12 @@ public class BlinkTheGame extends BasicGame {
 			randomX = Math.random()
 					* (GAME_WIDTH - stupidWidth - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
-			randomY = -stupidHeight;
+			randomY = -stupidHeight-SPAWN_MARGIN;
 		} else { // Down
 			randomX = Math.random()
 					* (GAME_WIDTH - stupidWidth - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
-			randomY = GAME_HEIGHT;
+			randomY = GAME_HEIGHT+SPAWN_MARGIN;
 		}
 		Point position = new Point((float) randomX, (float) randomY);
 		return position;
@@ -114,15 +115,33 @@ public class BlinkTheGame extends BasicGame {
 	public void update(GameContainer container, int delta)
 			throws SlickException {
 		ninja.update(container);
-		for (StupidOne stupid : stupids) {
-			stupid.update();
-		}
+		updateStupids();
 		Input input = container.getInput();
 		keyController(input);
 		difficultyIncrease();
 	}
 	
-	private void keyController (Input input) {
+	private void updateStupids() throws SlickException {
+		for (StupidOne stupid : stupids) {
+			stupid.update();
+		}
+		checkForDeadStupid();
+	}
+	
+	private void checkForDeadStupid() throws SlickException {
+		int i = 0;
+		for (StupidOne stupid : stupids) {
+			if (stupid.isDeletable()) {
+				System.out.println("Death at index: "+i);
+				killEnemy(i);
+				break;
+			}
+			i++;
+		}
+		
+	}
+
+	private void keyController(Input input) {
 		left = input.isKeyDown(Input.KEY_A);
 		right = input.isKeyDown(Input.KEY_D);
 		up = input.isKeyDown(Input.KEY_W);
@@ -134,10 +153,21 @@ public class BlinkTheGame extends BasicGame {
 			difficulty += DIFFICULTY_INTERVAL;
 		}
 	}
-	
-	public static void killEnemy(int index) {
+
+	public void killEnemy(int index) throws SlickException {
 		stupids.remove(index);
 		score++;
+		System.out.println("Object removed");
+		spawnEnemy();
+	}
+	
+	private void spawnEnemy() throws SlickException {
+		double randomSide = Math.random() * 4;
+		Point randomPos = randomPosition(randomSide);
+		StupidOne newEnemy = new StupidOne((float) randomPos.getX(),
+				(float) randomPos.getY());
+		stupids.add(newEnemy);
+		System.out.println("Enemy respawned");
 	}
 
 	@Override

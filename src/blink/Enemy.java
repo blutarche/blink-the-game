@@ -23,6 +23,7 @@ public class Enemy extends Character {
 	private final double TURN_SPEED = 0.5;
 
 	private MovementMode movementMode;
+	private boolean isDead;
 
 	public Enemy(float x, float y, float v, double sightRange,
 			double sightDegree, String enemyType) throws SlickException {
@@ -34,6 +35,7 @@ public class Enemy extends Character {
 		movementMode = MovementMode.OFFSCREEN;
 		distanceGoing = 0;
 		degree = 0;
+		isDead = false;
 
 		rangeOfSight = sightRange;
 		degreeOfSight = sightDegree;
@@ -109,7 +111,6 @@ public class Enemy extends Character {
 		double desiredTurnDegree = tempDegree * TURN_SPEED;
 		this.degree = (float) desiredTurnDegree;
 	}
-
 
 	private boolean isOffScreen() {
 		if (Enemy.PADDING <= x
@@ -211,5 +212,13 @@ public class Enemy extends Character {
 			unfinishedDegree -= 360.0;
 		}
 		return unfinishedDegree;
+	}
+
+	public void killed() {
+		isDead = true;
+	}
+
+	public boolean isDeletable() {
+		return isDead;
 	}
 }
