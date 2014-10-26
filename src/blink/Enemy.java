@@ -20,7 +20,7 @@ public class Enemy extends Character {
 	private final double RUN_INTO_LIMIT = 150.0;
 	private final double RUN_RANDOM_RANGE = 30.0;
 	private final double DEG_LIMIT = 50.0;
-	private final double TURN_SPEED = 0.5;
+	private final double TURN_SPEED = 0.3;
 
 	private MovementMode movementMode;
 	private boolean isDead;
@@ -92,6 +92,7 @@ public class Enemy extends Character {
 
 	private void offscreenMovement() {
 		checkStartingPosition();
+		v = 1.0f;
 		if (!checkTurnEnd()) {
 			turning();
 		} else if (!isOffScreen()) {
@@ -161,7 +162,7 @@ public class Enemy extends Character {
 
 	private void turnStart() {
 		double degreeChange = randomTurnDegree();
-		int tempDegree = (int) (degreeChange / TURN_SPEED);
+		double tempDegree = Math.floor(degreeChange / TURN_SPEED);
 		double desiredTurnDegree = tempDegree * TURN_SPEED;
 
 		this.targetDegree = this.degree + desiredTurnDegree;
@@ -186,7 +187,8 @@ public class Enemy extends Character {
 	}
 
 	private boolean checkTurnEnd() {
-		if (degree == targetDegree) {
+		if (targetDegree - TURN_SPEED <= degree
+				&& degree <= targetDegree + TURN_SPEED) {
 			return true;
 		} else {
 			return false;
