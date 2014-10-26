@@ -34,6 +34,9 @@ public class BlinkTheGame extends BasicGame {
 	public static boolean up;
 	public static boolean down;
 
+	public static boolean isGameStart;
+	public static boolean isGameEnd;
+
 	public static void main(String[] args) {
 		try {
 			BlinkTheGame game = new BlinkTheGame("Blink!");
@@ -53,32 +56,93 @@ public class BlinkTheGame extends BasicGame {
 	}
 
 	@Override
+	public void update(GameContainer container, int delta)
+			throws SlickException {
+		if (isGameStart) {
+			ninja.update(container);
+			updateStupids();
+			Input input = container.getInput();
+			keyController(input);
+			difficultyIncrease();
+			checkGameEnds();
+		}
+	}
+
+	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		for (StupidOne stupid : stupids) {
-			stupid.render();
+		if (isGameStart) {
+			renderEnemies();
+			ninja.render();
+			renderInformation(g);
+		} else {
+			if (isGameEnd) {
+				renderGameOver(g);
+			} else {
+				renderLaunchPage(g);
+			}
 		}
-		ninja.render();
-		g.drawString("Ninja HP: " + ninja.hp, 10, 30);
-		g.drawString("Difficulty: " + difficulty, 10, 50);
-		g.drawString("Score: " + score, 10, 70);
 		// cursor.render();
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		Color background = new Color(0, 0, 0);
-		container.getGraphics().setBackground(background);
-		ninja = new Ninja(GAME_WIDTH / 2, GAME_HEIGHT / 2);
-		Image cursorImage = new Image("res/cursor-2.png");
-		container.setMouseCursor(cursorImage, 25, 25);
-		generateEnemy();
+		initBackground(container);
+		initCursor(container);
+		initNinja();
+		initEnemies();
+		isGameStart = false;
+		isGameEnd = false;
 	}
 
-	private void generateEnemy() throws SlickException {
+	private void initBackground(GameContainer container) {
+		Color background = new Color(0, 0, 0);
+		container.getGraphics().setBackground(background);
+	}
+
+	private void initCursor(GameContainer container) throws SlickException {
+		Image cursorImage = new Image("res/cursor-2.png");
+		container.setMouseCursor(cursorImage, 25, 25);
+	}
+
+	private void initNinja() throws SlickException {
+		ninja = new Ninja(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+	}
+
+	private void initEnemies() throws SlickException {
 		for (int i = 0; i < STUPID_COUNT; i++) {
 			spawnEnemy();
 		}
+	}
+
+	private void renderInformation(Graphics g) {
+		g.drawString("Ninja HP: " + ninja.hp, 10, 30);
+		g.drawString("Difficulty: " + difficulty, 10, 50);
+		g.drawString("Score: " + score, 10, 70);
+	}
+
+	private void renderEnemies() {
+		for (StupidOne stupid : stupids) {
+			stupid.render();
+		}
+	}
+
+	private void renderLaunchPage(Graphics g) {
+		g.drawString(".........................", GAME_WIDTH / 2 - 110,
+				GAME_HEIGHT / 2 - 18);
+		g.drawString("Click mouse to start game", GAME_WIDTH / 2 - 110,
+				GAME_HEIGHT / 2);
+		g.drawString(".........................", GAME_WIDTH / 2 - 110,
+				GAME_HEIGHT / 2 + 10);
+	}
+
+	private void renderGameOver(Graphics g) {
+		g.drawString("GAME OVER", GAME_WIDTH / 2 - 37,
+				GAME_HEIGHT / 2 - 30);
+		g.drawString("Your score is", GAME_WIDTH / 2 - 52,
+				GAME_HEIGHT / 2);
+		g.drawString(""+score, GAME_WIDTH / 2 - 5,
+				GAME_HEIGHT / 2 + 20);
 	}
 
 	public Point randomPosition(double randomSide) {
@@ -87,12 +151,12 @@ public class BlinkTheGame extends BasicGame {
 		double randomX;
 		double randomY;
 		if (randomSide < 1) { // Left
-			randomX = -stupidWidth-SPAWN_MARGIN;
+			randomX = -stupidWidth - SPAWN_MARGIN;
 			randomY = Math.random()
 					* (GAME_HEIGHT - stupidHeight - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
 		} else if (randomSide < 2) { // Right
-			randomX = GAME_WIDTH+SPAWN_MARGIN;
+			randomX = GAME_WIDTH + SPAWN_MARGIN;
 			randomY = Math.random()
 					* (GAME_HEIGHT - stupidHeight - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
@@ -100,45 +164,42 @@ public class BlinkTheGame extends BasicGame {
 			randomX = Math.random()
 					* (GAME_WIDTH - stupidWidth - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
-			randomY = -stupidHeight-SPAWN_MARGIN;
+			randomY = -stupidHeight - SPAWN_MARGIN;
 		} else { // Down
 			randomX = Math.random()
 					* (GAME_WIDTH - stupidWidth - Enemy.PADDING * 2)
 					+ Enemy.PADDING;
-			randomY = GAME_HEIGHT+SPAWN_MARGIN;
+			randomY = GAME_HEIGHT + SPAWN_MARGIN;
 		}
 		Point position = new Point((float) randomX, (float) randomY);
 		return position;
 	}
 
-	@Override
-	public void update(GameContainer container, int delta)
-			throws SlickException {
-		ninja.update(container);
-		updateStupids();
-		Input input = container.getInput();
-		keyController(input);
-		difficultyIncrease();
+	private void checkGameEnds() {
+		if (ninja.hp <= 0) {
+			isGameStart = false;
+			isGameEnd = true;
+		}
 	}
-	
+
 	private void updateStupids() throws SlickException {
 		for (StupidOne stupid : stupids) {
 			stupid.update();
 		}
 		checkForDeadStupid();
 	}
-	
+
 	private void checkForDeadStupid() throws SlickException {
 		int i = 0;
 		for (StupidOne stupid : stupids) {
 			if (stupid.isDeletable()) {
-				System.out.println("Death at index: "+i);
+				System.out.println("Death at index: " + i);
 				killEnemy(i);
 				break;
 			}
 			i++;
 		}
-		
+
 	}
 
 	private void keyController(Input input) {
@@ -160,7 +221,7 @@ public class BlinkTheGame extends BasicGame {
 		System.out.println("Object removed");
 		spawnEnemy();
 	}
-	
+
 	private void spawnEnemy() throws SlickException {
 		double randomSide = Math.random() * 4;
 		Point randomPos = randomPosition(randomSide);
@@ -178,10 +239,14 @@ public class BlinkTheGame extends BasicGame {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (button == 0) {
-			ninja.attack();
-		} else if (button == 1) {
-			ninja.blink(x, y);
+		if (!isGameStart) {
+			isGameStart = true;
+		} else {
+			if (button == 0) {
+				ninja.attack();
+			} else if (button == 1) {
+				ninja.blink(x, y);
+			}
 		}
 	}
 
