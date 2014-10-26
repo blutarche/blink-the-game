@@ -133,7 +133,7 @@ public class BlinkTheGame extends BasicGame {
 		g.drawString("Click mouse to start game", GAME_WIDTH / 2 - 110,
 				GAME_HEIGHT / 2);
 		g.drawString(".........................", GAME_WIDTH / 2 - 110,
-				GAME_HEIGHT / 2 + 10);
+				GAME_HEIGHT / 2 + 12);
 	}
 
 	private void renderGameOver(Graphics g) {

@@ -8,7 +8,7 @@ public class Ninja extends Character {
 
 	private NinjaSight sight;
 
-	private final static double RANGE_OF_SIGHT = 50;
+	private final static double RANGE_OF_SIGHT = 60;
 	private final static double DEGREE_OF_SIGHT = 90;
 
 	public int hp;

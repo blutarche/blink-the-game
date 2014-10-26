@@ -50,8 +50,8 @@ public class Enemy extends Character {
 
 	public void update() {
 		this.v = BlinkTheGame.difficulty;
-		move();
 		sight.update();
+		move();
 	}
 
 	private void move() {

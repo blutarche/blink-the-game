@@ -10,7 +10,7 @@ public class EnemySight extends Sight {
 	private Enemy enemy;
 
 	private float attackDelay;
-	private static final float ATTACK_COOLDOWN = 120.0f;
+	private static final float ATTACK_COOLDOWN = 150.0f;
 
 	private boolean ninjaDetected;
 
